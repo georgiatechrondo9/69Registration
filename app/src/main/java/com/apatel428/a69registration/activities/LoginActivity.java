@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * This method is to initialize views
+     * This method initializes views
      */
     private void initViews() {
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * This method is to initialize listeners
+     * This method initializes listeners
      */
     private void initListeners() {
         appCompatButtonLogin.setOnClickListener(this);
@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * This method is to initialize objects to be used
+     * This method initializes objects
      */
     private void initObjects() {
         databaseHelper = new DatabaseHelper(activity);
@@ -78,9 +78,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * This implemented method is to listen the click on view
+     * This implemented method initializes the on click
      *
-     * @param v
+     * @param v the view being initialized
      */
     @Override
     public void onClick(View v) {
@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * This method is to validate the input text fields and verify login credentials from SQLite
+     * This method validates and verifies the login stuff
      */
     private void verifyFromSQLite() {
         if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_email))) {
@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * This method is to empty all input edit text
+     * This method empties all input text
      */
     private void emptyInputEditText() {
         textInputEditTextEmail.setText(null);

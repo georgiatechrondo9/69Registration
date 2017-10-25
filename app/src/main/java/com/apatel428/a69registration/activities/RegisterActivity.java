@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * This method is to initialize views
+     * This method is initializes views
      */
     private void initViews() {
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
@@ -67,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * This method is to initialize listeners
+     * This method initializes listeners
      */
     private void initListeners() {
         appCompatButtonRegister.setOnClickListener(this);
@@ -75,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * This method is to initialize objects to be used
+     * This method initializes objects
      */
     private void initObjects() {
         inputValidation = new InputValidation(activity);
@@ -84,9 +84,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * This implemented method is to listen the click on view
+     * This listens to the click
      *
-     * @param v
+     * @param v view you are listening
      */
     @Override
     public void onClick(View v) {
@@ -101,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * This method is to validate the input text fields and post data to SQLite
+     * This validates input and sends data to sqllite
      */
     private void postDataToSQLite() {
         if (!inputValidation.isInputEditTextFilled(textInputEditTextName, textInputLayoutName, getString(R.string.error_message_name))) {
@@ -135,7 +135,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * This method is to empty all input edit text
+     * This method empties all input text
      */
     private void emptyInputEditText() {
         textInputEditTextName.setText(null);

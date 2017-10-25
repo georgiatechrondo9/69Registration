@@ -16,9 +16,9 @@ public class InputValidation {
     private Context context;
 
     /**
-     * constructor
+     * input validation constructor
      *
-     * @param context
+     * @param context context to be inputted
      */
     public InputValidation(Context context) {
         this.context = context;
@@ -27,10 +27,10 @@ public class InputValidation {
     /**
      * method to check InputEditText filled .
      *
-     * @param textInputEditText
-     * @param textInputLayout
-     * @param message
-     * @return
+     * @param textInputEditText what is being editted
+     * @param textInputLayout the layout of the field
+     * @param message in the field
+     * @return boolean which tells you if the text is filled
      */
     public boolean isInputEditTextFilled(TextInputEditText textInputEditText, TextInputLayout textInputLayout, String message) {
         String value = textInputEditText.getText().toString().trim();
@@ -47,10 +47,10 @@ public class InputValidation {
     /**
      * method to check InputEditText has valid email .
      *
-     * @param textInputEditText
-     * @param textInputLayout
-     * @param message
-     * @return
+     * @param textInputEditText the text in the field
+     * @param textInputLayout the place where the text is
+     * @param message string which you are checking
+     * @return boolean which tells you if it is valid
      */
     public boolean isInputEditTextEmail(TextInputEditText textInputEditText, TextInputLayout textInputLayout, String message) {
         String value = textInputEditText.getText().toString().trim();
@@ -64,6 +64,14 @@ public class InputValidation {
         return true;
     }
 
+    /**
+     * Checks if InputEditText matches
+     *
+     * @param textInputEditText the text in the field
+     * @param textInputLayout the place where the text is
+     * @param message string which you are checking
+     * @return boolean which tells you if it is valid
+     */
     public boolean isInputEditTextMatches(TextInputEditText textInputEditText1, TextInputEditText textInputEditText2, TextInputLayout textInputLayout, String message) {
         String value1 = textInputEditText1.getText().toString().trim();
         String value2 = textInputEditText2.getText().toString().trim();
@@ -78,9 +86,9 @@ public class InputValidation {
     }
 
     /**
-     * method to Hide keyboard
+     * Hides keyboard
      *
-     * @param view
+     * @param view that you are hiding
      */
     private void hideKeyboardFrom(View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
