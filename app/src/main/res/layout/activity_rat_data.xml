@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.apatel428.a69registration.activities.RatData">
+
     <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/rv"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="193dp" />
 
 
 
@@ -70,6 +70,22 @@
         android:id="@+id/location_type"
         android:layout_toRightOf="@+id/unique_key"
         />
+
+    <Button
+        android:id="@+id/dateFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filter"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="462dp" />
+
+    <Button
+        android:id="@+id/showMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Map"
+        tools:layout_editor_absoluteX="295dp"
+        tools:layout_editor_absoluteY="462dp" />
 
 
 </android.support.constraint.ConstraintLayout>
