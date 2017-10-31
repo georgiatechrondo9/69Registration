@@ -61,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("hello");
+                System.out.println("hello1");
                 System.out.println(dataSnapshot.child("911").child("latitude").getValue().toString());
                 for(DataSnapshot ds: dataSnapshot.getChildren()) {
                     Object longitude = ds.child("longitude").getValue();
@@ -83,6 +83,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         // Add a marker in Sydney and move the camera
+        System.out.println("hello");
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));

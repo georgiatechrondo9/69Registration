@@ -4,88 +4,94 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.apatel428.a69registration.activities.RatData">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv"
-        android:layout_width="match_parent"
-        android:layout_height="193dp" />
-
+    tools:context="com.apatel428.a69registration.activities.RatData"
+    tools:layout_editor_absoluteY="81dp">
 
 
     <TextView
+        android:id="@+id/unique_key"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/unique_key"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:textSize="30sp"
-        />
+        android:textSize="30sp" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/borough"
-        android:layout_toRightOf="@+id/unique_key"
-        />
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/unique_key" />
+
+    <TextView
         android:id="@+id/city"
-        android:layout_toRightOf="@+id/unique_key"
-        />
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/unique_key" />
+
+    <TextView
         android:id="@+id/created_date"
-        android:layout_toRightOf="@+id/unique_key"
-        />
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/unique_key" />
+
+    <TextView
         android:id="@+id/incident_address"
-        android:layout_toRightOf="@+id/unique_key"
-        />
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/unique_key" />
+
+    <TextView
         android:id="@+id/incident_zip"
-        android:layout_toRightOf="@+id/unique_key"
-        />
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/unique_key" />
+
+    <TextView
         android:id="@+id/latitude"
-        android:layout_toRightOf="@+id/unique_key"
-        />
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/unique_key" />
+
+    <TextView
         android:id="@+id/longitude"
-        android:layout_toRightOf="@+id/unique_key"
-        />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/unique_key" />
+
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/location_type"
-        android:layout_toRightOf="@+id/unique_key"
-        />
-
-    <Button
-        android:id="@+id/dateFilter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/unique_key" />
+
+    <Button
+        android:id="@+id/dateFilterButton"
+        android:layout_width="368dp"
+        android:layout_height="48dp"
         android:text="Filter"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="462dp" />
+        app:layout_constraintBottom_toTopOf="@+id/addReportButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline2" />
 
     <Button
-        android:id="@+id/showMap"
+        android:id="@+id/addReportButton"
+        android:layout_width="368dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:text="Add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Map"
-        tools:layout_editor_absoluteX="295dp"
-        tools:layout_editor_absoluteY="462dp" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
 
 
 </android.support.constraint.ConstraintLayout>

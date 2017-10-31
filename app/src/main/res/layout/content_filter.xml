@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.apatel428.a69registration.activities.FilterActivity"
+    tools:showIn="@layout/activity_filter">
+
+    <EditText
+        android:id="@+id/startingDate"
+        android:layout_width="215dp"
+        android:layout_height="46dp"
+        android:layout_marginEnd="85dp"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Starting Date"
+        android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/endingDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/endingDate"
+        android:layout_width="215dp"
+        android:layout_height="46dp"
+        android:layout_marginEnd="85dp"
+        android:layout_marginStart="84dp"
+        android:ems="10"
+        android:hint="Ending Date"
+        android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/filterMapButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startingDate" />
+
+    <Button
+        android:id="@+id/filterMapButton"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="355dp"
+        android:layout_marginEnd="149dp"
+        android:layout_marginStart="147dp"
+        android:text="Map"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/endingDate" />
+</android.support.constraint.ConstraintLayout>
