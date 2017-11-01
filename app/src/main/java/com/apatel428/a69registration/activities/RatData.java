@@ -58,7 +58,7 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addReportButton:
-                Intent intentMap = new Intent(getApplicationContext() , MapsActivity.class);
+                Intent intentMap = new Intent(getApplicationContext() , ReportActivity.class);
                 startActivity(intentMap);
                 break;
             case R.id.dateFilterButton:

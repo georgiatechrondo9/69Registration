@@ -56,6 +56,9 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * gets the m/d/y of the entered date in int form
+     */
     public void startFilterDate() {
         String[] startDateArrayString = startingDate.getText().toString().trim().split("/");
         this.startDateArray = new int[startDateArrayString.length];
@@ -65,6 +68,9 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * gets the m/d/y of the entered date in int form
+     */
     public void endFilterDate() {
         String[] endDateArrayString = endingDate.getText().toString().trim().split("/");
         this.endDateArray = new int[endDateArrayString.length];
