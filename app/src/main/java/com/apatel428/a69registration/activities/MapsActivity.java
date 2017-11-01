@@ -16,19 +16,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.apatel428.a69registration.R;
 import com.google.firebase.database.ValueEventListener;
-import com.apatel428.a69registration.model.Report;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private List<Integer> latitudeList;
-    private List<Integer> longitudeList;
+    private List<Object> latitudeList;
+    private List<Object> longitudeList;
     private List<String> keyList;
 
     @Override
@@ -57,24 +54,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         longitudeList = new ArrayList<>();
         latitudeList = new ArrayList<>();
         keyList = new ArrayList<>();
+        final int[] startArray = FilterActivity.startDateArray;
+        final int[] endArray = FilterActivity.endDateArray;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("hello1");
-                System.out.println(dataSnapshot.child("911").child("latitude").getValue().toString());
                 for(DataSnapshot ds: dataSnapshot.getChildren()) {
                     Object longitude = ds.child("longitude").getValue();
                     Object latitude = ds.child("latitude").getValue();
                     Object uniquekey = ds.child("uniquekey").getValue();
-                    if(longitude != null && latitude != null && uniquekey!=null) {
-                        longitudeList.add(Integer.parseInt(longitude.toString()));
-                        latitudeList.add(Integer.parseInt(latitude.toString()));
-                        keyList.add(uniquekey.toString());
+                    Object createdDate = ds.child("createddate").getValue();
+                    if(longitude != null && latitude != null && uniquekey!=null && createdDate != null) {
+                        int[] dateArray = stringToIntArray(createdDate);
+                        if (startArray != null && endArray != null) {
+                            //years
+                            if (dateArray[2] >= startArray[2] && dateArray[2] <= endArray[2] ) {
+                                //month
+                                if (dateArray[0] >= startArray[0] && dateArray[0] <= endArray[0]) {
+                                    //day
+                                    if (dateArray[1] >= startArray[1] && dateArray[1] <= endArray[1]) {
+                                        longitudeList.add(longitude);
+                                        latitudeList.add(latitude);
+                                        keyList.add(uniquekey.toString());
+                                        LatLng marker = new LatLng((Double) latitude, (Double) longitude);
+                                        mMap.addMarker(new MarkerOptions().position(marker).title(uniquekey.toString()));
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
-                LatLng marker = new LatLng(latitudeList.get(0), longitudeList.get(0));
-                mMap.addMarker(new MarkerOptions().position(marker).title(keyList.get(0)));
             }
 
             @Override
@@ -83,10 +93,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         // Add a marker in Sydney and move the camera
-        System.out.println("hello");
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
+    private int[] stringToIntArray(Object o) {
+        String string = o.toString();
+        String[] stringArray = string.split("-");
+        int[] intArray = new int[stringArray.length];
+        for(int i = 0;i < stringArray.length; i++) {
+            Integer integer = Integer.parseInt(stringArray[i]);
+            intArray[i] = integer.intValue();
+        }
+        return intArray;
+    }
 }

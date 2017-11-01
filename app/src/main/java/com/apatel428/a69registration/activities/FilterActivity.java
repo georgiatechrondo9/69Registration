@@ -58,8 +58,8 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
 
     public void startFilterDate() {
         String[] startDateArrayString = startingDate.getText().toString().trim().split("/");
-        this.startDateArray = new int[3];
-        for(int i = 0; i < 3; i++) {
+        this.startDateArray = new int[startDateArrayString.length];
+        for(int i = 0; i < startDateArrayString.length; i++) {
             Integer startInteger = Integer.parseInt(startDateArrayString[i]);
             this.startDateArray[i] = startInteger.intValue();
         }
@@ -67,10 +67,10 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
 
     public void endFilterDate() {
         String[] endDateArrayString = endingDate.getText().toString().trim().split("/");
-        int[] endDateArray = new int[3];
-        for(int i = 0; i < 3; i++) {
+        this.endDateArray = new int[endDateArrayString.length];
+        for(int i = 0; i < endDateArrayString.length; i++) {
             Integer endInteger = Integer.parseInt(endDateArrayString[i]);
-            endDateArray[i] = endInteger.intValue();
+            this.endDateArray[i] = endInteger.intValue();
         }
     }
 }
