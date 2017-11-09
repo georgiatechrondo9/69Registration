@@ -13,6 +13,7 @@ import android.widget.EditText;
 
 import com.apatel428.a69registration.R;
 import com.apatel428.a69registration.model.Date;
+import com.apatel428.a69registration.model.Report;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class FilterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -74,29 +76,37 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
             endFilterDate();
             startActivity(intentFilter);
         } else if (v.getId() == (R.id.filterGraphButton)) {
-            Intent intentFilter = new Intent(getApplicationContext(), GraphActivity.class);
+            System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
             startFilterDate();
             endFilterDate();
             validDateArray = new ArrayList<Date>();
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             reference.addValueEventListener(new ValueEventListener() {
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    System.out.println("READING");
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        Object createdDate = ds.child("createddate").getValue();
-                        int[] dateArray = stringToIntArray(createdDate);
-                        if (startDateArray[2] <= dateArray[2] && endDateArray[2] >= dateArray[2]) {
-                            if (startDateArray[0] <= dateArray[0] && endDateArray[0] >= dateArray[0]) {
-                                Date d = new Date(new int[]{dateArray[0], dateArray[2]});
-                                dateCount(d);
+                        System.out.println(ds);
+                        Object m = ds.getValue();
+                        Map<String,String> map = (Map<String, String>) (m);
+                        String createdDate = map.get("createddate");
+                        System.out.println(createdDate);
+                        if(createdDate != null) {
+                            int[] dateArray = stringToIntArray(createdDate);
+                            if (startDateArray[2] <= dateArray[2] && endDateArray[2] >= dateArray[2]) {
+                                if (startDateArray[0] <= dateArray[0] && endDateArray[0] >= dateArray[0]) {
+                                    Date d = new Date(new int[]{dateArray[0], dateArray[2]});
+                                    dateCount(d);
+                                }
                             }
                         }
                     }
                 }
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    System.out.println("Read Fail " + databaseError.getMessage());
                 }
             });
+            Intent intentFilter = new Intent(getApplicationContext(), GraphActivity.class);
             startActivity(intentFilter);
         }
     }
