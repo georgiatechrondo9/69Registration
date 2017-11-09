@@ -53,7 +53,11 @@
         <activity
             android:name=".activities.ReportActivity"
             android:label="@string/title_activity_report"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.GraphActivity"
+            android:label="GraphActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -12,6 +12,16 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.apatel428.a69registration.R;
+import com.apatel428.a69registration.model.Date;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class FilterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -20,6 +30,8 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
     public static int[] startDateArray;
     public static int[] endDateArray;
     private Button filterMapButton;
+    private Button filterGraphButton;
+    public static ArrayList<Date> validDateArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +49,23 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         startingDate = (EditText) findViewById(R.id.startingDate);
         endingDate = (EditText) findViewById(R.id.endingDate);
         filterMapButton = (Button) findViewById(R.id.filterMapButton);
+        filterGraphButton = (Button) findViewById(R.id.filterGraphButton);
     }
 
     /**
      * This method initializes listeners
      */
     private void initListeners() {
+
         filterMapButton.setOnClickListener(this);
+        filterGraphButton.setOnClickListener(this);
     }
 
+    /**
+     * The onDataChange method reads from Firebase, and
+     * turns the in-range dates into Date objects, then
+     * stores them in the validDateArray.
+     */
     @Override
     public void onClick(View v) {
         if (v.getId() == (R.id.filterMapButton)) {
@@ -53,7 +73,43 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
             startFilterDate();
             endFilterDate();
             startActivity(intentFilter);
+        } else if (v.getId() == (R.id.filterGraphButton)) {
+            Intent intentFilter = new Intent(getApplicationContext(), GraphActivity.class);
+            startFilterDate();
+            endFilterDate();
+            validDateArray = new ArrayList<Date>();
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+            reference.addValueEventListener(new ValueEventListener() {
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        Object createdDate = ds.child("createddate").getValue();
+                        int[] dateArray = stringToIntArray(createdDate);
+                        if (startDateArray[2] <= dateArray[2] && endDateArray[2] >= dateArray[2]) {
+                            if (startDateArray[0] <= dateArray[0] && endDateArray[0] >= dateArray[0]) {
+                                Date d = new Date(new int[]{dateArray[0], dateArray[2]});
+                                dateCount(d);
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            startActivity(intentFilter);
         }
+    }
+
+    private int[] stringToIntArray(Object o) {
+        String string = o.toString();
+        String[] stringArray = string.split("-");
+        int[] intArray = new int[stringArray.length];
+        for(int i = 0;i < stringArray.length; i++) {
+            Integer integer = Integer.parseInt(stringArray[i]);
+            intArray[i] = integer.intValue();
+        }
+        return intArray;
     }
 
     /**
@@ -77,6 +133,21 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         for(int i = 0; i < endDateArrayString.length; i++) {
             Integer endInteger = Integer.parseInt(endDateArrayString[i]);
             this.endDateArray[i] = endInteger.intValue();
+        }
+    }
+
+    /**
+     * Adds any new Dates (just month and year) to the ArrayList
+     * called validDateArray. If there is already a Date with the
+     * same month and year as the one being passed in, then it will
+     * simply increment the Date's counter. This is to be used in the
+     * graph.
+     */
+    private void dateCount(Date d) {
+        if (validDateArray.contains(d)) {
+            validDateArray.get(validDateArray.indexOf(d)).increment();
+        } else {
+            validDateArray.add(d);
         }
     }
 }

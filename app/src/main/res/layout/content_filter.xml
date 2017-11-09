@@ -8,6 +8,21 @@
     tools:context="com.apatel428.a69registration.activities.FilterActivity"
     tools:showIn="@layout/activity_filter">
 
+    <Button
+        android:id="@+id/filterGraphButton"
+        android:layout_width="86dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:text="Graph"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/startingDate"
         android:layout_width="215dp"
