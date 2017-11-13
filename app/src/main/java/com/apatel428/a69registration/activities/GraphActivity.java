@@ -9,11 +9,14 @@ package com.apatel428.a69registration.activities;
 
         import com.apatel428.a69registration.R;
         import com.apatel428.a69registration.model.Date;
+        import com.apatel428.a69registration.model.Report;
         import com.google.android.gms.maps.model.LatLng;
         import com.google.android.gms.maps.model.MarkerOptions;
         import com.google.firebase.database.DataSnapshot;
+        import com.google.firebase.database.DatabaseError;
         import com.google.firebase.database.DatabaseReference;
         import com.google.firebase.database.FirebaseDatabase;
+        import com.google.firebase.database.ValueEventListener;
         import com.jjoe64.graphview.DefaultLabelFormatter;
         import com.jjoe64.graphview.GraphView;
         import com.jjoe64.graphview.ValueDependentColor;
@@ -25,14 +28,24 @@ package com.apatel428.a69registration.activities;
         import com.jjoe64.graphview.series.PointsGraphSeries;
 
         import java.util.ArrayList;
+        import java.util.Map;
+        import java.util.logging.Filter;
 
 public class GraphActivity extends AppCompatActivity {
+    public ArrayList<Date> validDateArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        validDateArray = new ArrayList<Date>();
+        if (FilterActivity.startDateArray != null && FilterActivity.endDateArray
+                != null) {
+            buildData();
+        } else {
+            validDateArray.add(new Date(new int[]{0, 0}));
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
-        ArrayList<Date> datesArrayList = FilterActivity.validDateArray;
+        ArrayList<Date> datesArrayList = validDateArray;
         DataPoint[] dpArray = new DataPoint[datesArrayList.size()];
         for (int i = 0; i < datesArrayList.size(); i++) {
             int numDate = datesArrayList.get(i).getDate()[1] * 100
@@ -59,5 +72,63 @@ public class GraphActivity extends AppCompatActivity {
         line_graph.getViewport().setMaxY(8);
 
         line_graph.getViewport().setScrollable(true);
+    }
+
+    public void buildData() {
+        System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference();
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                System.out.println("READING");
+                System.out.println(dataSnapshot.getRef());
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Object m = ds.getValue();
+                    Map<String,String> map = (Map<String, String>) (m);
+                    String createdDate = map.get("createddate");
+                    System.out.println(createdDate);
+                    if(createdDate != null) {
+                        int[] dateArray = stringToIntArray(createdDate);
+                        if (FilterActivity.startDateArray[2] <= dateArray[2] && FilterActivity.endDateArray[2] >= dateArray[2]) {
+                            if (FilterActivity.startDateArray[0] <= dateArray[0] && FilterActivity.endDateArray[0] >= dateArray[0]) {
+                                Date d = new Date(new int[]{dateArray[0], dateArray[2]});
+                                dateCount(d);
+                            }
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Read Fail " + databaseError.getMessage());
+            }
+        });
+    }
+
+    private int[] stringToIntArray(Object o) {
+        String string = o.toString();
+        String[] stringArray = string.split("-");
+        int[] intArray = new int[stringArray.length];
+        for(int i = 0;i < stringArray.length; i++) {
+            Integer integer = Integer.parseInt(stringArray[i]);
+            intArray[i] = integer.intValue();
+        }
+        return intArray;
+    }
+
+    /**
+     * Adds any new Dates (just month and year) to the ArrayList
+     * called validDateArray. If there is already a Date with the
+     * same month and year as the one being passed in, then it will
+     * simply increment the Date's counter. This is to be used in the
+     * graph.
+     */
+    private void dateCount(Date d) {
+        if (validDateArray.contains(d)) {
+            validDateArray.get(validDateArray.indexOf(d)).increment();
+        } else {
+            validDateArray.add(d);
+        }
     }
 }
