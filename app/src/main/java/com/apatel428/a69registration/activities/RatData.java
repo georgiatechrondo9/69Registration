@@ -36,12 +36,12 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
                 .getReference()
                 .child("cs2340-f8f6d")
                 .limitToLast(50);
-        /**
+        /*
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv);
         RatAdapter s = new RatAdapter(call, aKeys, aItems);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(s);
-         **/
+         */
     }
 
     private void initViews() {

@@ -63,9 +63,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 for(DataSnapshot ds: dataSnapshot.getChildren()) {
                     Object longitude = ds.child("longitude").getValue();
                     Object latitude = ds.child("latitude").getValue();
-                    Object uniquekey = ds.child("uniquekey").getValue();
+                    Object uniqueKey = ds.child("uniquekey").getValue();
                     Object createdDate = ds.child("createddate").getValue();
-                    if(longitude != null && latitude != null && uniquekey!=null && createdDate != null) {
+                    if(longitude != null && latitude != null && uniqueKey!=null && createdDate != null) {
                         int[] dateArray = stringToIntArray(createdDate);
                         if (startArray != null && endArray != null) {
                             //years
@@ -76,9 +76,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     if (dateArray[1] >= startArray[1] && dateArray[1] <= endArray[1]) {
                                         longitudeList.add(longitude);
                                         latitudeList.add(latitude);
-                                        keyList.add(uniquekey.toString());
+                                        keyList.add(uniqueKey.toString());
                                         LatLng marker = new LatLng((Double) latitude, (Double) longitude);
-                                        mMap.addMarker(new MarkerOptions().position(marker).title(uniquekey.toString()));
+                                        mMap.addMarker(new MarkerOptions().position(marker).title(uniqueKey.toString()));
                                     }
                                 }
                             }
@@ -98,7 +98,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
-    private int[] stringToIntArray(Object o) {
+    /**
+     *
+     * @param o object with date
+     * @return int array [m,d,y]
+     */
+    public static int[] stringToIntArray(Object o) {
         String string = o.toString();
         String[] stringArray = string.split("-");
         int[] intArray = new int[stringArray.length];

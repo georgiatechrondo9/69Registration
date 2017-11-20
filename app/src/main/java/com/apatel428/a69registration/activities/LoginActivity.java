@@ -1,7 +1,7 @@
 package com.apatel428.a69registration.activities;
 
-/**
- * Created by georg on 10/01/2017.
+/*
+  Created by georg on 10/01/2017.
  */
 
 import com.apatel428.a69registration.R;

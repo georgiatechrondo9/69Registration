@@ -27,7 +27,7 @@ public class InputValidation {
     /**
      * method to check InputEditText filled .
      *
-     * @param textInputEditText what is being editted
+     * @param textInputEditText what is being edited
      * @param textInputLayout the layout of the field
      * @param message in the field
      * @return boolean which tells you if the text is filled
@@ -92,6 +92,7 @@ public class InputValidation {
      */
     private void hideKeyboardFrom(View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        assert imm != null;
         imm.hideSoftInputFromWindow(view.getWindowToken(), WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 }

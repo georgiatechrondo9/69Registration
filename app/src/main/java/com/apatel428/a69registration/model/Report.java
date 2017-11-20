@@ -45,30 +45,39 @@ public class Report extends AbstractReport{
                 '}';
     }
 
+    @Override
     public String getUniqueKey() {
         return uniquekey;
     }
+    @Override
     public String getCreatedDate() {
         return createddate;
     }
+    @Override
     public String getLocationType() {
         return locationtype;
     }
+    @Override
     public String getIncidentZip() {
         return incidentzip;
     }
+    @Override
     public String getIncidentAddress() {
         return incidentaddress;
     }
+    @Override
     public String getCity() {
         return city;
     }
+    @Override
     public String getBorough() {
         return borough;
     }
+    @Override
     public String getLatitude() {
         return latitude;
     }
+    @Override
     public String getLongitude() {
         return longitude;
     }
