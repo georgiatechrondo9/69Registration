@@ -18,9 +18,19 @@ public class Date {
     }
 
     @Override
+    public int hashCode() {
+        return date[1]*100 + date[0];
+    }
+
+    @Override
     public boolean equals(Object o) {
-        return date[0] == (((Date)o).getDate()[0])
-                && date[2] == (((Date)o).getDate()[2]);
+        if (o == null) {
+            return false;
+        } else {
+            return this.hashCode() == o.hashCode()
+                    && this.getClass().getName()
+                    == o.getClass().getName();
+        }
     }
 
     public int[] getDate() {

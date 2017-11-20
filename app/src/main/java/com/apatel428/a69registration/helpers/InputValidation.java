@@ -67,7 +67,8 @@ public class InputValidation {
     /**
      * Checks if InputEditText matches
      *
-     * @param textInputEditText the text in the field
+     * @param textInputEditText1 the text in the field
+     * @param textInputEditText2
      * @param textInputLayout the place where the text is
      * @param message string which you are checking
      * @return boolean which tells you if it is valid

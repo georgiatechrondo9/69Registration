@@ -78,11 +78,12 @@ public class GraphActivity extends AppCompatActivity {
         System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference();
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.child("report").setValue(null);
+        reference.child("report").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 System.out.println("READING");
-                System.out.println(dataSnapshot.getRef());
+                System.out.println(dataSnapshot.getChildrenCount());
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Object m = ds.getValue();
                     Map<String,String> map = (Map<String, String>) (m);
