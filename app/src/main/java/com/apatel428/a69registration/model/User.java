@@ -24,6 +24,10 @@ public class User {
     }
 
     public void setName(String name) {
+        if (name == null)
+        {
+            throw new IllegalArgumentException("Name is null. Enter in a nonnull name.");
+        }
         this.name = name;
     }
 
