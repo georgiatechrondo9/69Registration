@@ -89,6 +89,9 @@ public class GraphActivity extends AppCompatActivity {
         line_graph.getViewport().setScrollable(true);
     }
 
+    /**
+     * Uses the filter dates to organize valid data
+     */
     public void buildData() {
         System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         final FirebaseDatabase database = FirebaseDatabase.getInstance();

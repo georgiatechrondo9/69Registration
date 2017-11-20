@@ -54,6 +54,10 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
         dateFilterButton.setOnClickListener(this);
     }
 
+    /**
+     * On-click handler for all buttons
+     * @param v passed in view
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
