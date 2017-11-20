@@ -12,6 +12,18 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.apatel428.a69registration.R;
+import com.apatel428.a69registration.model.Date;
+import com.apatel428.a69registration.model.Report;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public class FilterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -20,6 +32,7 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
     public static int[] startDateArray;
     public static int[] endDateArray;
     private Button filterMapButton;
+    private Button filterGraphButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,21 +50,34 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         startingDate = (EditText) findViewById(R.id.startingDate);
         endingDate = (EditText) findViewById(R.id.endingDate);
         filterMapButton = (Button) findViewById(R.id.filterMapButton);
+        filterGraphButton = (Button) findViewById(R.id.filterGraphButton);
     }
 
     /**
      * This method initializes listeners
      */
     private void initListeners() {
+
         filterMapButton.setOnClickListener(this);
+        filterGraphButton.setOnClickListener(this);
     }
 
+    /**
+     * The onDataChange method reads from Firebase, and
+     * turns the in-range dates into Date objects, then
+     * stores them in the validDateArray.
+     */
     @Override
     public void onClick(View v) {
         if (v.getId() == (R.id.filterMapButton)) {
             Intent intentFilter = new Intent(getApplicationContext(), MapsActivity.class);
             startFilterDate();
             endFilterDate();
+            startActivity(intentFilter);
+        } else if (v.getId() == (R.id.filterGraphButton)) {
+            startFilterDate();
+            endFilterDate();
+            Intent intentFilter = new Intent(getApplicationContext(), GraphActivity.class);
             startActivity(intentFilter);
         }
     }

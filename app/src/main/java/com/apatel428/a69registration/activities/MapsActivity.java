@@ -1,11 +1,17 @@
 package com.apatel428.a69registration.activities;
 
+import android.content.Intent;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
+import com.apatel428.a69registration.model.Report;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -37,7 +43,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
-
 
     /**
      * Manipulates the map once available.

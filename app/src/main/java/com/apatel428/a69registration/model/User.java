@@ -2,6 +2,7 @@ package com.apatel428.a69registration.model;
 
 /**
  * Created by georg on 10/01/2017.
+ * setName(String name) modified by Nick Soong
  */
 
 public class User {
@@ -24,6 +25,10 @@ public class User {
     }
 
     public void setName(String name) {
+        if (name == null)
+        {
+            throw new IllegalArgumentException("Name is null. Enter in a nonnull name.");
+        }
         this.name = name;
     }
 
