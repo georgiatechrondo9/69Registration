@@ -29,6 +29,9 @@ package com.apatel428.a69registration.activities;
 
         import java.util.ArrayList;
         import java.util.Map;
+        import java.util.concurrent.ExecutorService;
+        import java.util.concurrent.Executors;
+        import java.util.concurrent.TimeUnit;
         import java.util.logging.Filter;
 
 public class GraphActivity extends AppCompatActivity {
@@ -39,7 +42,19 @@ public class GraphActivity extends AppCompatActivity {
         validDateArray = new ArrayList<Date>();
         if (FilterActivity.startDateArray != null && FilterActivity.endDateArray
                 != null) {
-            buildData();
+            ExecutorService executor = Executors.newFixedThreadPool(1);
+            executor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    buildData();
+                }
+            });
+            executor.shutdown();
+            try {
+                executor.awaitTermination(120, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } else {
             validDateArray.add(new Date(new int[]{0, 0}));
         }
@@ -78,8 +93,7 @@ public class GraphActivity extends AppCompatActivity {
         System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference();
-        reference.child("report").setValue(null);
-        reference.child("report").addValueEventListener(new ValueEventListener() {
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 System.out.println("READING");
