@@ -2,6 +2,7 @@ package com.apatel428.a69registration.model;
 
 /**
  * Created by georg on 10/01/2017.
+ * setName(String name) modified by Nick Soong
  */
 
 public class User {
