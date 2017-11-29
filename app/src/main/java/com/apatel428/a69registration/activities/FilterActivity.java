@@ -77,7 +77,7 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
         } else if (v.getId() == (R.id.filterGraphButton)) {
             startFilterDate();
             endFilterDate();
-            Intent intentFilter = new Intent(getApplicationContext(), GraphActivity.class);
+            Intent intentFilter = new Intent(getApplicationContext(), LoadingGraphActivity.class);
             startActivity(intentFilter);
         }
     }

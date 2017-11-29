@@ -34,33 +34,20 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Filter;
 
+import static com.apatel428.a69registration.activities.LoadingGraphActivity.dpArray;
+
 public class GraphActivity extends AppCompatActivity {
-    public ArrayList<Date> validDateArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        validDateArray = new ArrayList<Date>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
-        generateTestData();
-        ArrayList<Date> datesArrayList = validDateArray;
-        DataPoint[] dpArray = new DataPoint[datesArrayList.size()];
-        for (int i = 0; i < datesArrayList.size(); i++) {
-            double numDate = (double) datesArrayList.get(i).getDate()[1]
-                    + ((double)datesArrayList.get(i).getDate()[0]/100);
-            dpArray[i] = new DataPoint(numDate, datesArrayList.get(i).getCount());
-        }
+
         // Line Graph
 
         GraphView line_graph = (GraphView) findViewById(R.id.graph);
         BarGraphSeries<DataPoint> line_series =
-                new BarGraphSeries<DataPoint>(new DataPoint[]{
-                        new DataPoint(0, -1),
-                        new DataPoint(1, 5),
-                        new DataPoint(2, 3),
-                        new DataPoint(3, 2),
-                        new DataPoint(4, 6)
-                });
+                new BarGraphSeries<>(dpArray);
         line_graph.addSeries(line_series);
 
         // set the bound
@@ -75,63 +62,17 @@ public class GraphActivity extends AppCompatActivity {
         line_series.setSpacing(50);
         line_series.setDrawValuesOnTop(true);
         line_series.setValuesOnTopColor(Color.RED);
-//        // set manual X bounds
-//        line_graph.getViewport().setXAxisBoundsManual(false);
-//        line_graph.getViewport().setMinX(0.5);
-//        line_graph.getViewport().setMaxX(3.5);
+        // set manual X bounds
+        line_graph.getViewport().setXAxisBoundsManual(true);
+        line_graph.getViewport().setMinX(16);
+        line_graph.getViewport().setMaxX(18);
 //
 //        // set manual Y bounds
-//        line_graph.getViewport().setYAxisBoundsManual(false);
-//        line_graph.getViewport().setMinY(0.5);
+        line_graph.getViewport().setYAxisBoundsManual(true);
+        line_graph.getViewport().setMinY(0);
 //        line_graph.getViewport().setMaxY(8);
 
 //        line_graph.getViewport().setScrollable(true);
-    }
-
-    public void generateTestData() {
-        Date date = new Date(new int[]{11, 17});
-        date.increment();
-        Date date2 = new Date(new int[]{12, 17});
-        date2.increment();
-        Date date3 = new Date(new int[]{10, 17});
-        validDateArray.add(date);
-        validDateArray.add(date2);
-        validDateArray.add(date3);
-    }
-
-    /**
-     * Uses the filter dates to organize valid data
-     */
-    public void buildData() {
-        System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference();
-        reference.child("testData").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("READING");
-                System.out.println(dataSnapshot.getChildrenCount());
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Object m = ds.getValue();
-                    Map<String,String> map = (Map<String, String>) (m);
-                    String createdDate = map.get("createddate");
-                    System.out.println(createdDate);
-                    if(createdDate != null) {
-                        int[] dateArray = stringToIntArray(createdDate);
-                        if (FilterActivity.startDateArray[2] <= dateArray[2] && FilterActivity.endDateArray[2] >= dateArray[2]) {
-                            if (FilterActivity.startDateArray[0] <= dateArray[0] && FilterActivity.endDateArray[0] >= dateArray[0]) {
-                                Date d = new Date(new int[]{dateArray[0], dateArray[2]});
-                                dateCount(d);
-                            }
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("Read Fail " + databaseError.getMessage());
-            }
-        });
     }
 
     private int[] stringToIntArray(Object o) {
@@ -143,20 +84,5 @@ public class GraphActivity extends AppCompatActivity {
             intArray[i] = integer.intValue();
         }
         return intArray;
-    }
-
-    /**
-     * Adds any new Dates (just month and year) to the ArrayList
-     * called validDateArray. If there is already a Date with the
-     * same month and year as the one being passed in, then it will
-     * simply increment the Date's counter. This is to be used in the
-     * graph.
-     */
-    private void dateCount(Date d) {
-        if (validDateArray.contains(d)) {
-            validDateArray.get(validDateArray.indexOf(d)).increment();
-        } else {
-            validDateArray.add(d);
-        }
     }
 }
