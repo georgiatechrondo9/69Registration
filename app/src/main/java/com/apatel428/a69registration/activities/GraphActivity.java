@@ -1,35 +1,38 @@
 package com.apatel428.a69registration.activities;
 
-        import android.graphics.Canvas;
-        import android.graphics.Color;
-        import android.graphics.DashPathEffect;
-        import android.graphics.Paint;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 
-        import com.apatel428.a69registration.R;
-        import com.apatel428.a69registration.model.Date;
-        import com.apatel428.a69registration.model.Report;
-        import com.google.android.gms.maps.model.LatLng;
-        import com.google.android.gms.maps.model.MarkerOptions;
-        import com.google.firebase.database.DataSnapshot;
-        import com.google.firebase.database.DatabaseError;
-        import com.google.firebase.database.DatabaseReference;
-        import com.google.firebase.database.FirebaseDatabase;
-        import com.google.firebase.database.ValueEventListener;
-        import com.jjoe64.graphview.DefaultLabelFormatter;
-        import com.jjoe64.graphview.GraphView;
-        import com.jjoe64.graphview.ValueDependentColor;
-        import com.jjoe64.graphview.helper.StaticLabelsFormatter;
-        import com.jjoe64.graphview.series.BarGraphSeries;
-        import com.jjoe64.graphview.series.DataPoint;
-        import com.jjoe64.graphview.series.DataPointInterface;
-        import com.jjoe64.graphview.series.LineGraphSeries;
-        import com.jjoe64.graphview.series.PointsGraphSeries;
+import com.apatel428.a69registration.R;
+import com.apatel428.a69registration.model.Date;
+import com.apatel428.a69registration.model.Report;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.ValueDependentColor;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
+import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.PointsGraphSeries;
 
-        import java.util.ArrayList;
-        import java.util.Map;
-        import java.util.logging.Filter;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Filter;
 
 public class GraphActivity extends AppCompatActivity {
     public ArrayList<Date> validDateArray;
@@ -39,7 +42,19 @@ public class GraphActivity extends AppCompatActivity {
         validDateArray = new ArrayList<Date>();
         if (FilterActivity.startDateArray != null && FilterActivity.endDateArray
                 != null) {
-            buildData();
+            ExecutorService executor = Executors.newFixedThreadPool(1);
+            executor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    buildData();
+                }
+            });
+            executor.shutdown();
+            try {
+                executor.awaitTermination(120, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } else {
             validDateArray.add(new Date(new int[]{0, 0}));
         }
@@ -74,15 +89,18 @@ public class GraphActivity extends AppCompatActivity {
         line_graph.getViewport().setScrollable(true);
     }
 
+    /**
+     * Uses the filter dates to organize valid data
+     */
     public void buildData() {
         System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reference = database.getReference();
-        reference.addValueEventListener(new ValueEventListener() {
+        reference.child("testData").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 System.out.println("READING");
-                System.out.println(dataSnapshot.getRef());
+                System.out.println(dataSnapshot.getChildrenCount());
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Object m = ds.getValue();
                     Map<String,String> map = (Map<String, String>) (m);
