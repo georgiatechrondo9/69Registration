@@ -44,11 +44,10 @@ public class LoadingGraphActivity extends AppCompatActivity {
                         System.out.println(createdDate);
                         if (createdDate != null) {
                             int[] dateArray = stringToIntArray(createdDate);
-                            if (FilterActivity.startDateArray[2] <= dateArray[2] && FilterActivity.endDateArray[2] >= dateArray[2]) {
-                                if (FilterActivity.startDateArray[0] <= dateArray[0] && FilterActivity.endDateArray[0] >= dateArray[0]) {
-                                    Date d = new Date(new int[]{dateArray[0], dateArray[2]});
-                                    dateCount(d);
-                                }
+                            if (dateToInt(FilterActivity.startDateArray) <= dateToInt(dateArray)
+                                    && dateToInt(FilterActivity.endDateArray) >= dateToInt(dateArray)) {
+                                Date d = new Date(new int[]{dateArray[0], dateArray[2]});
+                                dateCount(d);
                             }
                         }
                     }
@@ -90,6 +89,13 @@ public class LoadingGraphActivity extends AppCompatActivity {
                     + ((double)validDateArray.get(i).getDate()[0]/100);
             dpArray[i] = new DataPoint(numDate, validDateArray.get(i).getCount());
         }
+    }
+
+    public static int dateToInt(int[] i) {
+        if (i.length != 3){
+            return 0;
+        }
+        return i[2]*100 + i[0];
     }
 }
 

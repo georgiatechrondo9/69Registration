@@ -27,6 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 import java.util.ArrayList;
 
+import static com.apatel428.a69registration.activities.LoadingGraphActivity.dateToInt;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -74,18 +76,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         int[] dateArray = stringToIntArray(createdDate);
                         if (startArray != null && endArray != null) {
                             //years
-                            if (dateArray[2] >= startArray[2] && dateArray[2] <= endArray[2] ) {
-                                //month
-                                if (dateArray[0] >= startArray[0] && dateArray[0] <= endArray[0]) {
-                                    //day
-                                    if (dateArray[1] >= startArray[1] && dateArray[1] <= endArray[1]) {
+                            if (dateToInt(FilterActivity.startDateArray) <= dateToInt(dateArray)
+                                    && dateToInt(FilterActivity.endDateArray) >= dateToInt(dateArray)) {
                                         longitudeList.add(longitude);
                                         latitudeList.add(latitude);
                                         keyList.add(uniqueKey.toString());
                                         LatLng marker = new LatLng((Double) latitude, (Double) longitude);
                                         mMap.addMarker(new MarkerOptions().position(marker).title(uniqueKey.toString()));
-                                    }
-                                }
                             }
                         }
                     }
