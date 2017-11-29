@@ -37,15 +37,18 @@ public class LoadingGraphActivity extends AppCompatActivity {
                 System.out.println(dataSnapshot.getChildrenCount());
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Object m = ds.getValue();
-                    Map<String,String> map = (Map<String, String>) (m);
-                    String createdDate = map.get("createddate");
-                    System.out.println(createdDate);
-                    if(createdDate != null) {
-                        int[] dateArray = stringToIntArray(createdDate);
-                        if (FilterActivity.startDateArray[2] <= dateArray[2] && FilterActivity.endDateArray[2] >= dateArray[2]) {
-                            if (FilterActivity.startDateArray[0] <= dateArray[0] && FilterActivity.endDateArray[0] >= dateArray[0]) {
-                                Date d = new Date(new int[]{dateArray[0], dateArray[2]});
-                                dateCount(d);
+                    System.out.println(m.getClass().getName());
+                    if (m.getClass().getName().equals("java.util.HashMap")) {
+                        Map<String, String> map = (Map<String, String>) (m);
+                        String createdDate = map.get("createddate");
+                        System.out.println(createdDate);
+                        if (createdDate != null) {
+                            int[] dateArray = stringToIntArray(createdDate);
+                            if (FilterActivity.startDateArray[2] <= dateArray[2] && FilterActivity.endDateArray[2] >= dateArray[2]) {
+                                if (FilterActivity.startDateArray[0] <= dateArray[0] && FilterActivity.endDateArray[0] >= dateArray[0]) {
+                                    Date d = new Date(new int[]{dateArray[0], dateArray[2]});
+                                    dateCount(d);
+                                }
                             }
                         }
                     }
