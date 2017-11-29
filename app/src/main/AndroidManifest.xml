@@ -58,6 +58,7 @@
             android:name=".activities.GraphActivity"
             android:label="GraphActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.LoadingGraphActivity"></activity>
     </application>
 
 </manifest>

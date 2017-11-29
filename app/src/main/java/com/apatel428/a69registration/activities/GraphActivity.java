@@ -40,53 +40,63 @@ public class GraphActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         validDateArray = new ArrayList<Date>();
-        if (FilterActivity.startDateArray != null && FilterActivity.endDateArray
-                != null) {
-            ExecutorService executor = Executors.newFixedThreadPool(1);
-            executor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    buildData();
-                }
-            });
-            executor.shutdown();
-            try {
-                executor.awaitTermination(120, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            validDateArray.add(new Date(new int[]{0, 0}));
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
+        generateTestData();
         ArrayList<Date> datesArrayList = validDateArray;
         DataPoint[] dpArray = new DataPoint[datesArrayList.size()];
         for (int i = 0; i < datesArrayList.size(); i++) {
-            int numDate = datesArrayList.get(i).getDate()[1] * 100
-                    + datesArrayList.get(i).getDate()[0];
+            double numDate = (double) datesArrayList.get(i).getDate()[1]
+                    + ((double)datesArrayList.get(i).getDate()[0]/100);
             dpArray[i] = new DataPoint(numDate, datesArrayList.get(i).getCount());
         }
         // Line Graph
 
         GraphView line_graph = (GraphView) findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> line_series =
-                new LineGraphSeries<DataPoint>(dpArray);
+        BarGraphSeries<DataPoint> line_series =
+                new BarGraphSeries<DataPoint>(new DataPoint[]{
+                        new DataPoint(0, -1),
+                        new DataPoint(1, 5),
+                        new DataPoint(2, 3),
+                        new DataPoint(3, 2),
+                        new DataPoint(4, 6)
+                });
         line_graph.addSeries(line_series);
 
         // set the bound
 
-        // set manual X bounds
-        line_graph.getViewport().setXAxisBoundsManual(true);
-        line_graph.getViewport().setMinX(0.5);
-        line_graph.getViewport().setMaxX(3.5);
+        line_series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
+            @Override
+            public int get(DataPoint data) {
+                return Color.rgb((int) data.getX()*255/4, (int) Math.abs(data.getY()*255/6), 100);
+            }
+        });
 
-        // set manual Y bounds
-        line_graph.getViewport().setYAxisBoundsManual(true);
-        line_graph.getViewport().setMinY(0.5);
-        line_graph.getViewport().setMaxY(8);
+        line_series.setSpacing(50);
+        line_series.setDrawValuesOnTop(true);
+        line_series.setValuesOnTopColor(Color.RED);
+//        // set manual X bounds
+//        line_graph.getViewport().setXAxisBoundsManual(false);
+//        line_graph.getViewport().setMinX(0.5);
+//        line_graph.getViewport().setMaxX(3.5);
+//
+//        // set manual Y bounds
+//        line_graph.getViewport().setYAxisBoundsManual(false);
+//        line_graph.getViewport().setMinY(0.5);
+//        line_graph.getViewport().setMaxY(8);
 
-        line_graph.getViewport().setScrollable(true);
+//        line_graph.getViewport().setScrollable(true);
+    }
+
+    public void generateTestData() {
+        Date date = new Date(new int[]{11, 17});
+        date.increment();
+        Date date2 = new Date(new int[]{12, 17});
+        date2.increment();
+        Date date3 = new Date(new int[]{10, 17});
+        validDateArray.add(date);
+        validDateArray.add(date2);
+        validDateArray.add(date3);
     }
 
     /**

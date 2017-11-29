@@ -18,7 +18,7 @@ public class Date {
      */
     public Date(int[] s) {
         date = s;
-        count = 0;
+        count = 1;
     }
 
     /**
