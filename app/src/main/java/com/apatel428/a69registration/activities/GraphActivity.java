@@ -64,8 +64,8 @@ public class GraphActivity extends AppCompatActivity {
         line_series.setValuesOnTopColor(Color.RED);
         // set manual X bounds
         line_graph.getViewport().setXAxisBoundsManual(true);
-        line_graph.getViewport().setMinX(16);
-        line_graph.getViewport().setMaxX(18);
+        line_graph.getViewport().setMinX(15);
+        line_graph.getViewport().setMaxX(19);
 //
 //        // set manual Y bounds
         line_graph.getViewport().setYAxisBoundsManual(true);

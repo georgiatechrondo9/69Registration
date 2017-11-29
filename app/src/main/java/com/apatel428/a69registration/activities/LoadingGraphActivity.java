@@ -86,7 +86,7 @@ public class LoadingGraphActivity extends AppCompatActivity {
         for (int i = 0; i < validDateArray.size(); i++) {
             System.out.println("Building dp array");
             double numDate = (double) validDateArray.get(i).getDate()[1]
-                    + ((double)validDateArray.get(i).getDate()[0]/100);
+                    + ((double)validDateArray.get(i).getDate()[0]/12);
             dpArray[i] = new DataPoint(numDate, validDateArray.get(i).getCount());
         }
     }
@@ -95,7 +95,7 @@ public class LoadingGraphActivity extends AppCompatActivity {
         if (i.length != 3){
             return 0;
         }
-        return i[2]*100 + i[0];
+        return i[2]*10000 + i[0]*100 + i[1];
     }
 }
 
