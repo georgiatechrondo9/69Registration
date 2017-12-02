@@ -13,6 +13,11 @@ import android.widget.Filter;
 import com.apatel428.a69registration.R;
 import com.apatel428.a69registration.adapters.RatAdapter;
 import com.apatel428.a69registration.model.Report;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -25,6 +30,9 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
     private ArrayList<String> aItems;
     private Button addReportButton;
     private Button dateFilterButton;
+    private Button signOutButton;
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +50,36 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(s);
          */
+
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
+        mAuth = FirebaseAuth.getInstance();
     }
 
     private void initViews() {
         addReportButton = (Button) findViewById(R.id.addReportButton);
         dateFilterButton = (Button) findViewById(R.id.dateFilterButton);
+        signOutButton = (Button) findViewById(R.id.signOutButton);
     }
 
     private void initListeners() {
         addReportButton.setOnClickListener(this);
         dateFilterButton.setOnClickListener(this);
+        signOutButton.setOnClickListener(this);
     }
 
+    private void revokeAccess() {
+        // Firebase sign out
+        mAuth.signOut();
+
+        // Google revoke access
+        mGoogleSignInClient.revokeAccess();
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -66,6 +92,9 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
                 Intent intentRegister = new Intent(getApplicationContext(), FilterActivity.class);
                 startActivity(intentRegister);
                 break;
+            case R.id.signOutButton:
+                revokeAccess();
+                startActivity(new Intent(RatData.this, LoginActivity.class));
         }
     }
 }

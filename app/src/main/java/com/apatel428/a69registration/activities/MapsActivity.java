@@ -57,10 +57,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final int[] startArray = FilterActivity.startDateArray;
         final int[] endArray = FilterActivity.endDateArray;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        if (reference != null) {
+            Log.i("REFERENCE", "Not Null");
+        } else {
+            Log.i("REFERENCE", "Null reference");
+        }
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println("hello");
+                Log.i("DATA","Data being read.");
                 for(DataSnapshot ds: dataSnapshot.getChildren()) {
                     Object longitude = ds.child("longitude").getValue();
                     Object latitude = ds.child("latitude").getValue();
@@ -69,9 +74,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if(longitude != null && latitude != null && uniqueKey!=null && createdDate != null) {
                         int[] dateArray = stringToIntArray(createdDate);
                         if (startArray != null && endArray != null) {
-                            //years
-                            if (dateToInt(FilterActivity.startDateArray) <= dateToInt(dateArray)
-                                    && dateToInt(FilterActivity.endDateArray) >= dateToInt(dateArray)) {
+                            if (dateToInt(startArray) <= dateToInt(dateArray)
+                                    && dateToInt(endArray) >= dateToInt(dateArray)) {
                                         LatLng marker = new LatLng((Double) latitude, (Double) longitude);
                                         mMap.addMarker(new MarkerOptions().position(marker).title(uniqueKey.toString()));
                             }
