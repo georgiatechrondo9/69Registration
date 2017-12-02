@@ -13,6 +13,6 @@ public abstract class AbstractReport {
     public abstract String getIncidentAddress();
     public abstract String getCity();
     public abstract String getBorough();
-    public abstract String getLatitude();
-    public abstract String getLongitude();
+    public abstract Long getLatitude();
+    public abstract Long getLongitude();
 }
