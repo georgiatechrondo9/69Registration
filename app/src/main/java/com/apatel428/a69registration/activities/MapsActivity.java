@@ -32,11 +32,7 @@ import static com.apatel428.a69registration.activities.LoadingGraphActivity.date
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private List<Object> latitudeList;
-    private List<Object> longitudeList;
-    private List<String> keyList;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -58,15 +54,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        longitudeList = new ArrayList<>();
-        latitudeList = new ArrayList<>();
-        keyList = new ArrayList<>();
         final int[] startArray = FilterActivity.startDateArray;
         final int[] endArray = FilterActivity.endDateArray;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                System.out.println("hello");
                 for(DataSnapshot ds: dataSnapshot.getChildren()) {
                     Object longitude = ds.child("longitude").getValue();
                     Object latitude = ds.child("latitude").getValue();
@@ -78,9 +72,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             //years
                             if (dateToInt(FilterActivity.startDateArray) <= dateToInt(dateArray)
                                     && dateToInt(FilterActivity.endDateArray) >= dateToInt(dateArray)) {
-                                        longitudeList.add(longitude);
-                                        latitudeList.add(latitude);
-                                        keyList.add(uniqueKey.toString());
                                         LatLng marker = new LatLng((Double) latitude, (Double) longitude);
                                         mMap.addMarker(new MarkerOptions().position(marker).title(uniqueKey.toString()));
                             }
