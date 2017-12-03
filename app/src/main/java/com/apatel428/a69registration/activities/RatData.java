@@ -83,11 +83,10 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
         FDB = FirebaseDatabase.getInstance();
         getDataFirebase();
-//        FDB.getReference().setValue(null);
     }
 
     void getDataFirebase() {
-        ref = FDB.getReference().orderByChild("getCreatedDate").limitToFirst(5);
+        ref = FDB.getReference().child("data").orderByChild("getCreatedDate").limitToLast(50);
 
         ref.addChildEventListener(new ChildEventListener() {
             @Override
