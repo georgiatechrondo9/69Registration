@@ -59,7 +59,7 @@ public class RatAdapter extends FirebaseRecyclerAdapter<RatAdapter.ViewHolder, R
 
     @Override public void onBindViewHolder(ViewHolder holder, int position) {
         Report item = getItem(position);
-        holder.tUniqueKey.setText(item.getUniqueKey());
+        holder.tUniqueKey.setText(item.getUniqueKey().toString());
         holder.tCreatedDate.setText(String.valueOf(item.getCreatedDate()));
     }
 

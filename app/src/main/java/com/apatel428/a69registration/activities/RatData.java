@@ -16,11 +16,13 @@ import android.widget.TextView;
 
 import com.apatel428.a69registration.R;
 import com.apatel428.a69registration.model.Report;
+import com.apatel428.a69registration.model.Report;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -35,7 +37,7 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
     private Button dateFilterButton;
     private RecyclerView ratView;
     private RatAdapter adapter;
-    List<Map<String, String>> listData;
+    List<Report> listData;
     private FirebaseDatabase FDB;
     private Query ref;
     private Button signOutButton;
@@ -75,23 +77,23 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
         ratView.setLayoutManager(LM);
         ratView.setItemAnimator(new DefaultItemAnimator());
         ratView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL));
-        listData = new ArrayList<Map<String, String>>();
+        listData = new ArrayList<>();
 
         adapter = new RatAdapter(listData);
 
         FDB = FirebaseDatabase.getInstance();
         getDataFirebase();
+//        FDB.getReference().setValue(null);
     }
 
     void getDataFirebase() {
-
-        ref = FDB.getReference().limitToLast(50);
+        ref = FDB.getReference().orderByChild("getCreatedDate").limitToFirst(5);
 
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Map<String, String> data;
-                data = dataSnapshot.getValue(Map.class);
+                Report data;
+                data = dataSnapshot.getValue(Report.class);
                 System.out.println(data);
 
                 listData.add(data);
@@ -153,9 +155,9 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
     public class RatAdapter extends RecyclerView.Adapter<RatAdapter.ViewHolder>{
 
-        List<Map<String, String>> listArray;
+        List<Report> listArray;
 
-        public RatAdapter(List<Map<String, String>> List) {
+        public RatAdapter(List<Report> List) {
             this.listArray = List;
         }
 
@@ -168,18 +170,23 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
         @Override
         public void onBindViewHolder(RatAdapter.ViewHolder holder, int position) {
-            Map<String, String> data = listArray.get(position);
-
-            holder.text.setText(data.get("createdDate"));
+            Report data = listArray.get(position);
+            holder.created.setText(data.getCreatedDate());
+            holder.city.setText(String.valueOf(data.getUniqueKey()));
+            holder.burough.setText(data.getBorough());
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView text;
+            TextView created;
+            TextView city;
+            TextView burough;
 
             public ViewHolder(View itemView) {
                 super(itemView);
-
-                text = (TextView) itemView.findViewById(R.id.rv);
+                System.out.println("RUNNING");
+                created = (TextView) itemView.findViewById(R.id.created_date);
+                city = (TextView) itemView.findViewById(R.id.city);
+                burough = (TextView) itemView.findViewById(R.id.burough);
             }
         }
 

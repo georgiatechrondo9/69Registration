@@ -50,16 +50,16 @@ public class ReportActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.confirmButton:
-                    data = FirebaseDatabase.getInstance().getReference().child("reports");
-                    System.out.println(data.toString());
-                    Report report = new Report();
-                    report.setIncidentAddress(address.getText().toString());
-                    report.setCity(city.getText().toString());
-                    report.setBorough(burough.getText().toString());
-                    report.setIncidentZip(zip.getText().toString());
-                    data.setValue(report);
-                    Intent intentConfirm = new Intent(getApplicationContext(), RatData.class); //Goes to blank page
-                    startActivity(intentConfirm);
+//                    data = FirebaseDatabase.getInstance().getReference().child("reports");
+//                    System.out.println(data.toString());
+//                    Report report = new Report();
+//                    report.setIncidentAddress(address.getText().toString());
+//                    report.setCity(city.getText().toString());
+//                    report.setBorough(burough.getText().toString());
+//                    report.setIncidentZip(zip.getText());
+//                    data.setValue(report);
+//                    Intent intentConfirm = new Intent(getApplicationContext(), RatData.class); //Goes to blank page
+//                    startActivity(intentConfirm);
                     break;
                 case R.id.cancelButton:
                     Intent intentCancel = new Intent(getApplicationContext(), RatData.class); //Goes to blank page

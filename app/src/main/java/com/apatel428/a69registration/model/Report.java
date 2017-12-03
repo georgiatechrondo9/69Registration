@@ -4,8 +4,8 @@ package com.apatel428.a69registration.model;
  * Created by 14bpo on 10/24/2017.
  */
 
-public class Report extends AbstractReport{
-    private String uniquekey;
+public class Report {
+    private Long uniquekey;
     private String createddate;
     private String locationtype;
     private String incidentzip;
@@ -17,8 +17,8 @@ public class Report extends AbstractReport{
 
     public Report() {
     }
-    public Report( String muniquekey, String mcreateddate, String mlocationtype, String mincidentzip, String mincidentaddress, String mcity, String mborough, long mlatitude, long mlongitude) {
-        String uniquekey = muniquekey;
+    public Report( Long muniquekey, String mcreateddate, String mlocationtype, String mincidentzip, String mincidentaddress, String mcity, String mborough, Long mlatitude, Long mlongitude) {
+        Long uniquekey = muniquekey;
         String createddate = mcreateddate;
         String locationtype = mlocationtype;
         String incidentzip = mincidentzip ;
@@ -45,44 +45,35 @@ public class Report extends AbstractReport{
                 '}';
     }
 
-    @Override
-    public String getUniqueKey() {
+    public Long getUniqueKey() {
         return uniquekey;
     }
-    @Override
     public String getCreatedDate() {
         return createddate;
     }
-    @Override
     public String getLocationType() {
         return locationtype;
     }
-    @Override
     public String getIncidentZip() {
         return incidentzip;
     }
-    @Override
     public String getIncidentAddress() {
         return incidentaddress;
     }
-    @Override
     public String getCity() {
         return city;
     }
-    @Override
     public String getBorough() {
         return borough;
     }
-    @Override
     public Long getLatitude() {
         return latitude;
     }
-    @Override
     public Long getLongitude() {
         return longitude;
     }
 
-    public void setUniqueKey(String unique_Key) {
+    public void setUniqueKey(Long unique_Key) {
         uniquekey = unique_Key;
     }
     public void setCreatedDate(String created_Date) {
