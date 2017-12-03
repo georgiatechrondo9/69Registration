@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
@@ -66,6 +67,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private int lockoutCounter;
     private long lockoutTime;
+    private boolean lockedOut;
+
+    private String lockoutMessage =
+            String.format("Too many login attempts. Please try again later.");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,10 +190,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.appCompatButtonLogin:
-                if (!isLockout()) {
+                if (!lockedOut) {
                     verifyFromSQLite();
                 } else {
-                    textInputEditTextEmail.setError("Your error message");
+                    Snackbar.make(nestedScrollView, lockoutMessage, Snackbar.LENGTH_LONG).show();;
                 }
                 break;
             case R.id.textViewLinkRegister:
@@ -223,10 +228,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             startActivity(accountsIntent);
         } else {
             // Snack Bar to show success message that record is wrong
-            textInputEditTextEmail.setError("Incorrect email or password!");
+            Snackbar.make(nestedScrollView, getString(R.string.error_valid_email_password), Snackbar.LENGTH_LONG).show();
             lockoutCounter++;
             if (lockoutCounter > 3) {
-                setLockoutTime();
+                lockedOut = true;
+                new CountDownTimer(30000, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        lockoutTime = millisUntilFinished / 1000;
+                    }
+
+                    public void onFinish() {
+                        lockedOut = false;
+                        lockoutCounter = 0;
+                    }
+
+                }.start();
             }
         }
     }
@@ -237,18 +253,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void emptyInputEditText() {
         textInputEditTextEmail.setText(null);
         textInputEditTextPassword.setText(null);
-    }
-
-    private void setLockoutTime() {
-        long currentTime = Calendar.getInstance().getTimeInMillis() * 1000 + 30;
-        lockoutTime = currentTime;
-    }
-
-    private boolean isLockout() {
-        return Calendar.getInstance().getTimeInMillis() * 1000 < lockoutTime;
-    }
-
-    private long getLockoutTime() {
-        return lockoutTime - Calendar.getInstance().getTimeInMillis() * 1000;
     }
 }
