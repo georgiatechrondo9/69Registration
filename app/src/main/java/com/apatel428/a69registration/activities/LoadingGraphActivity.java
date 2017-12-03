@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.apatel428.a69registration.R;
-import com.apatel428.a69registration.model.IntDate;
+import com.apatel428.a69registration.model.Date;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,12 +19,12 @@ import java.util.Map;
 import static com.apatel428.a69registration.activities.MapsActivity.stringToIntArray;
 
 public class LoadingGraphActivity extends AppCompatActivity {
-    private ArrayList<IntDate> validIntDateArray;
+    private ArrayList<Date> validDateArray;
     public static DataPoint[] dpArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        validIntDateArray = new ArrayList<>();
+        validDateArray = new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading_graph);
         System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
@@ -46,7 +46,7 @@ public class LoadingGraphActivity extends AppCompatActivity {
                             int[] dateArray = stringToIntArray(createdDate);
                             if (dateToInt(FilterActivity.startDateArray) <= dateToInt(dateArray)
                                     && dateToInt(FilterActivity.endDateArray) >= dateToInt(dateArray)) {
-                                IntDate d = new IntDate(new int[]{dateArray[0], dateArray[2]});
+                                Date d = new Date(new int[]{dateArray[0], dateArray[2]});
                                 dateCount(d);
                             }
                         }
@@ -66,28 +66,28 @@ public class LoadingGraphActivity extends AppCompatActivity {
 
     /**
      * Adds any new Dates (just month and year) to the ArrayList
-     * called validIntDateArray. If there is already a IntDate with the
+     * called validDateArray. If there is already a Date with the
      * same month and year as the one being passed in, then it will
-     * simply increment the IntDate's counter. This is to be used in the
+     * simply increment the Date's counter. This is to be used in the
      * graph.
      */
-    private void dateCount(IntDate d) {
-        if (validIntDateArray.contains(d)) {
+    private void dateCount(Date d) {
+        if (validDateArray.contains(d)) {
             System.out.println("incrementing");
-            validIntDateArray.get(validIntDateArray.indexOf(d)).increment();
+            validDateArray.get(validDateArray.indexOf(d)).increment();
         } else {
             System.out.println("adding");
-            validIntDateArray.add(d);
+            validDateArray.add(d);
         }
     }
 
     public void buildData() {
-        dpArray = new DataPoint[validIntDateArray.size()];
-        for (int i = 0; i < validIntDateArray.size(); i++) {
+        dpArray = new DataPoint[validDateArray.size()];
+        for (int i = 0; i < validDateArray.size(); i++) {
             System.out.println("Building dp array");
-            double numDate = (double) validIntDateArray.get(i).getDate()[1]
-                    + ((double) validIntDateArray.get(i).getDate()[0]/12);
-            dpArray[i] = new DataPoint(numDate, validIntDateArray.get(i).getCount());
+            double numDate = (double) validDateArray.get(i).getDate()[1]
+                    + ((double) validDateArray.get(i).getDate()[0]/12);
+            dpArray[i] = new DataPoint(numDate, validDateArray.get(i).getCount());
         }
     }
 

@@ -4,11 +4,11 @@ package com.apatel428.a69registration.model;
  * Created by 14bpo on 11/8/2017.
  */
 
-public class IntDate {
+public class Date {
     private int[] date;
     private int count;
 
-    public IntDate() {
+    public Date() {
         this(new int[]{0,0});
     }
 
@@ -16,13 +16,13 @@ public class IntDate {
      * Constructor
      * @param s integer array of {month, year}
      */
-    public IntDate(int[] s) {
+    public Date(int[] s) {
         date = s;
         count = 1;
     }
 
     /**
-     * hash function for IntDate object
+     * hash function for Date object
      *
      * @return hash code
      */
@@ -32,10 +32,10 @@ public class IntDate {
     }
 
     /**
-     * equals method for IntDate object
+     * equals method for Date object
      *
      * @param o an object
-     * @return if the object is equal to this IntDate
+     * @return if the object is equal to this Date
      */
     @Override
     public boolean equals(Object o) {
@@ -76,7 +76,7 @@ public class IntDate {
     }
 
     /**
-     * Increments the count of this IntDate by 1
+     * Increments the count of this Date by 1
      */
     public void increment() {
         count++;

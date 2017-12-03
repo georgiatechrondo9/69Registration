@@ -49,7 +49,7 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
 
     /**
      * The onDataChange method reads from Firebase, and
-     * turns the in-range dates into IntDate objects, then
+     * turns the in-range dates into Date objects, then
      * stores them in the validDateArray.
      */
     @Override

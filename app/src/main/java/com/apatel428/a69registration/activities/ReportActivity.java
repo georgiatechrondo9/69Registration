@@ -12,9 +12,14 @@ import android.widget.EditText;
 import com.apatel428.a69registration.R;
 import com.apatel428.a69registration.model.Report;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class ReportActivity extends AppCompatActivity {
     private EditText address;
@@ -24,6 +29,7 @@ public class ReportActivity extends AppCompatActivity {
     private Button confirm;
     private Button cancel;
     private DatabaseReference data;
+    private Calendar now;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,9 @@ public class ReportActivity extends AppCompatActivity {
         burough = (EditText) findViewById(R.id.buroughIn);
         confirm = (Button) findViewById(R.id.confirmButton);
         cancel = (Button) findViewById(R.id.cancelButton);
+
+        data = FirebaseDatabase.getInstance().getReference().child("data");
+        now = Calendar.getInstance();
 
         initListeners();
     }
@@ -50,16 +59,15 @@ public class ReportActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.confirmButton:
-//                    data = FirebaseDatabase.getInstance().getReference().child("reports");
-//                    System.out.println(data.toString());
-//                    Report report = new Report();
-//                    report.setIncidentAddress(address.getText().toString());
-//                    report.setCity(city.getText().toString());
-//                    report.setBorough(burough.getText().toString());
-//                    report.setIncidentZip(zip.getText());
-//                    data.setValue(report);
-//                    Intent intentConfirm = new Intent(getApplicationContext(), RatData.class); //Goes to blank page
-//                    startActivity(intentConfirm);
+                    Report report = new Report();
+                    report.setIncidentAddress(address.getText().toString());
+                    report.setCity(city.getText().toString());
+                    report.setBorough(burough.getText().toString());
+                    report.setIncidentZip(zip.getText().toString());
+                    report.setUniqueKey(generateKey(report));
+                    data.child("UserReport").setValue(report);
+                    Intent intentConfirm = new Intent(getApplicationContext(), RatData.class); //Goes to blank page
+                    startActivity(intentConfirm);
                     break;
                 case R.id.cancelButton:
                     Intent intentCancel = new Intent(getApplicationContext(), RatData.class); //Goes to blank page
@@ -68,4 +76,15 @@ public class ReportActivity extends AppCompatActivity {
             }
         }
     };
+
+    private long generateKey(Report report) {
+        long key = report.getLatitude() * 3259 + report.getLongitude() * 1229; //Add lattitude/longitude fields
+        return key;
+    }
+
+    private long generateIndex() {
+        long index = now.getTimeInMillis();
+        System.out.println(index);
+        return index;
+    }
 }

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.apatel428.a69registration.R;
+import com.apatel428.a69registration.helpers.LastIndexHolder;
 import com.apatel428.a69registration.model.Report;
 import com.apatel428.a69registration.model.Report;
 import com.google.firebase.auth.FirebaseAuth;
@@ -86,14 +87,15 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
     }
 
     void getDataFirebase() {
-        ref = FDB.getReference().child("data").orderByChild("getCreatedDate").limitToLast(50);
+        ref = FDB.getReference().child("data").orderByChild("createddate").limitToLast(50);
 
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Report data;
+                LastIndexHolder.setLastIndex(dataSnapshot.getChildrenCount());
+                System.out.println(LastIndexHolder.getLastIndex());
                 data = dataSnapshot.getValue(Report.class);
-                System.out.println(data);
 
                 listData.add(data);
                 ratView.setAdapter(adapter);
