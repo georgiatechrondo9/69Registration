@@ -37,6 +37,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private final AppCompatActivity activity = LoginActivity.this;
 
@@ -61,6 +63,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private InputValidation inputValidation;
     private DatabaseHelper databaseHelper;
+
+    private int lockoutCounter;
+    private long lockoutTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,7 +185,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.appCompatButtonLogin:
-                verifyFromSQLite();
+                if (!isLockout()) {
+                    verifyFromSQLite();
+                } else {
+                    textInputEditTextEmail.setError("Your error message");
+                }
                 break;
             case R.id.textViewLinkRegister:
                 // Navigate to RegisterActivity
@@ -214,7 +223,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             startActivity(accountsIntent);
         } else {
             // Snack Bar to show success message that record is wrong
-            Snackbar.make(nestedScrollView, getString(R.string.error_valid_email_password), Snackbar.LENGTH_LONG).show();
+            textInputEditTextEmail.setError("Incorrect email or password!");
+            lockoutCounter++;
+            if (lockoutCounter > 3) {
+                setLockoutTime();
+            }
         }
     }
 
@@ -224,5 +237,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void emptyInputEditText() {
         textInputEditTextEmail.setText(null);
         textInputEditTextPassword.setText(null);
+    }
+
+    private void setLockoutTime() {
+        long currentTime = Calendar.getInstance().getTimeInMillis() * 1000 + 30;
+        lockoutTime = currentTime;
+    }
+
+    private boolean isLockout() {
+        return Calendar.getInstance().getTimeInMillis() * 1000 < lockoutTime;
+    }
+
+    private long getLockoutTime() {
+        return lockoutTime - Calendar.getInstance().getTimeInMillis() * 1000;
     }
 }
