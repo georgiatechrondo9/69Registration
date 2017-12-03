@@ -2,9 +2,6 @@ package com.apatel428.a69registration.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,18 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.apatel428.a69registration.R;
-import com.apatel428.a69registration.model.Date;
-import com.apatel428.a69registration.model.Report;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.Map;
 
 public class FilterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -64,7 +49,7 @@ public class FilterActivity extends AppCompatActivity implements View.OnClickLis
 
     /**
      * The onDataChange method reads from Firebase, and
-     * turns the in-range dates into Date objects, then
+     * turns the in-range dates into IntDate objects, then
      * stores them in the validDateArray.
      */
     @Override
