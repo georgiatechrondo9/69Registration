@@ -20,6 +20,7 @@ import com.apatel428.a69registration.helpers.InputValidation;
 import com.apatel428.a69registration.model.Report;
 import com.apatel428.a69registration.model.Report;
 import com.apatel428.a69registration.model.User;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;

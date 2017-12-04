@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -59,6 +60,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final int RC_SIGN_IN = 69;
     private static final String TAG = "GoogleActivity";
     private static final String TAGF = "FacebookActivity";
+
+    private CallbackManager mCallbackManager;
 
     private FirebaseAuth mAuth;
     private SignInButton mGoogleButton;
@@ -179,6 +182,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
