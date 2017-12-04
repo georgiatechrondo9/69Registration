@@ -15,9 +15,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.apatel428.a69registration.R;
-import com.apatel428.a69registration.helpers.LastIndexHolder;
+import com.apatel428.a69registration.helpers.ActiveUserHolder;
+import com.apatel428.a69registration.helpers.InputValidation;
 import com.apatel428.a69registration.model.Report;
 import com.apatel428.a69registration.model.Report;
+import com.apatel428.a69registration.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +30,7 @@ import com.google.firebase.database.Query;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,14 +47,17 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
     private Button signOutButton;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
+    private long count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rat_data);
+        count = 0;
         initViews();
         initListeners();
+
 
 //        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv);
 //        RatAdapter s = new RatAdapter(call, aKeys, aItems);
@@ -65,6 +71,8 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
         mAuth = FirebaseAuth.getInstance();
+
+        ActiveUserHolder.setUser(new User());
 
     }
 
@@ -87,16 +95,14 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
     }
 
     void getDataFirebase() {
-        ref = FDB.getReference().child("data").orderByChild("createddate").limitToLast(50);
+        ref = FDB.getReference().child("reports").orderByKey().limitToLast(20);
 
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Report data;
-                LastIndexHolder.setLastIndex(dataSnapshot.getChildrenCount());
-                System.out.println(LastIndexHolder.getLastIndex());
                 data = dataSnapshot.getValue(Report.class);
-
+                System.out.print("Key" + dataSnapshot.getKey());
                 listData.add(data);
                 ratView.setAdapter(adapter);
             }
@@ -135,6 +141,8 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
         // Google revoke access
         mGoogleSignInClient.revokeAccess();
+
+        LoginManager.getInstance().logOut();
     }
 
     @Override
@@ -173,7 +181,7 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
         public void onBindViewHolder(RatAdapter.ViewHolder holder, int position) {
             Report data = listArray.get(position);
             holder.created.setText(data.getCreatedDate());
-            holder.city.setText(String.valueOf(data.getUniqueKey()));
+            holder.city.setText(String.valueOf(data.getCity()));
             holder.burough.setText(data.getBorough());
         }
 
@@ -184,7 +192,6 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                System.out.println("RUNNING");
                 created = (TextView) itemView.findViewById(R.id.created_date);
                 city = (TextView) itemView.findViewById(R.id.city);
                 burough = (TextView) itemView.findViewById(R.id.burough);

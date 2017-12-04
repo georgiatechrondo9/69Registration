@@ -12,6 +12,13 @@ public class User {
     private String email;
     private String password;
 
+    public User() {
+        id = 99999;
+        name = "Unknown";
+        email = "none";
+        password = "none";
+    };
+
     public int getId() {
         return id;
     }
