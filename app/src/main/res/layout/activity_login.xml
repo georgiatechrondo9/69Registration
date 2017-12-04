@@ -65,5 +65,11 @@
             android:id="@+id/googleButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"></com.google.android.gms.common.SignInButton>
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/facebookButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"></com.facebook.login.widget.LoginButton>
+
     </android.support.v7.widget.LinearLayoutCompat>
 </android.support.v4.widget.NestedScrollView>

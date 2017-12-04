@@ -141,6 +141,8 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
         // Google revoke access
         mGoogleSignInClient.revokeAccess();
+
+        LoginManager.getInstance().logOut();
     }
 
     @Override

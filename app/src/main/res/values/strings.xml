@@ -24,4 +24,6 @@
     <string name="title_activity_maps2">Map</string>
     <string name="title_activity_filter">FilterActivity</string>
     <string name="title_activity_report">ReportActivity</string>
+    <string name="facebook_app_id">517878398573547</string>
+    <string name="fb_login_protocol_scheme">fb517878398573547</string>
 </resources>
