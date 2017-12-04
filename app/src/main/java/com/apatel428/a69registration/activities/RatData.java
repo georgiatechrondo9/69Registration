@@ -3,71 +3,61 @@ package com.apatel428.a69registration.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Filter;
 
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.apatel428.a69registration.R;
-import com.apatel428.a69registration.adapters.RatAdapter;
+import com.apatel428.a69registration.helpers.LastIndexHolder;
 import com.apatel428.a69registration.model.Report;
-import com.facebook.login.LoginManager;
+import com.apatel428.a69registration.model.Report;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
-import static com.apatel428.a69registration.activities.LoadingGraphActivity.dateToInt;
+import java.util.List;
+import java.util.Map;
 
 public class RatData extends AppCompatActivity implements View.OnClickListener {
-    private DatabaseReference data;
-    private ArrayList<Report> aKeys;
-    private ArrayList<String> aItems;
     private Button addReportButton;
     private Button dateFilterButton;
+    private RecyclerView ratView;
+    private RatAdapter adapter;
+    List<Report> listData;
+    private FirebaseDatabase FDB;
+    private Query ref;
     private Button signOutButton;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
 
-    static final ArrayList<Report> reportList = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rat_data);
         initViews();
         initListeners();
-        Query call = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("cs2340-f8f6d")
-                .limitToLast(50);
-        /*
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv);
-        RatAdapter s = new RatAdapter(call, aKeys, aItems);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(s);
-         */
 
-        // Configure Google Sign In
+//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv);
+//        RatAdapter s = new RatAdapter(call, aKeys, aItems);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerView.setAdapter(s);
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -75,12 +65,62 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
         mAuth = FirebaseAuth.getInstance();
+
     }
 
     private void initViews() {
         addReportButton = (Button) findViewById(R.id.addReportButton);
         dateFilterButton = (Button) findViewById(R.id.dateFilterButton);
         signOutButton = (Button) findViewById(R.id.signOutButton);
+        ratView = (RecyclerView) findViewById(R.id.rv);
+        ratView.setHasFixedSize(true);
+        RecyclerView.LayoutManager LM = new LinearLayoutManager(getApplicationContext());
+        ratView.setLayoutManager(LM);
+        ratView.setItemAnimator(new DefaultItemAnimator());
+        ratView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL));
+        listData = new ArrayList<>();
+
+        adapter = new RatAdapter(listData);
+
+        FDB = FirebaseDatabase.getInstance();
+        getDataFirebase();
+    }
+
+    void getDataFirebase() {
+        ref = FDB.getReference().child("data").orderByChild("createddate").limitToLast(50);
+
+        ref.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Report data;
+                LastIndexHolder.setLastIndex(dataSnapshot.getChildrenCount());
+                System.out.println(LastIndexHolder.getLastIndex());
+                data = dataSnapshot.getValue(Report.class);
+
+                listData.add(data);
+                ratView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void initListeners() {
@@ -95,9 +135,8 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
         // Google revoke access
         mGoogleSignInClient.revokeAccess();
-
-        LoginManager.getInstance().logOut();
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -106,7 +145,6 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
                 startActivity(intentMap);
                 break;
             case R.id.dateFilterButton:
-                // Navigate to FilterActivity
                 Intent intentRegister = new Intent(getApplicationContext(), FilterActivity.class);
                 startActivity(intentRegister);
                 break;
@@ -115,19 +153,46 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
                 startActivity(new Intent(RatData.this, LoginActivity.class));
         }
     }
-    /**
-     *
-     * @param o object with date
-     * @return int array [m,d,y]
-     */
-    public static int[] stringToIntArray(Object o) {
-        String string = o.toString();
-        String[] stringArray = string.split("-");
-        int[] intArray = new int[stringArray.length];
-        for(int i = 0;i < stringArray.length; i++) {
-            Integer integer = Integer.parseInt(stringArray[i]);
-            intArray[i] = integer.intValue();
+
+    public class RatAdapter extends RecyclerView.Adapter<RatAdapter.ViewHolder>{
+
+        List<Report> listArray;
+
+        public RatAdapter(List<Report> List) {
+            this.listArray = List;
         }
-        return intArray;
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_rat_view, parent, false);
+
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(RatAdapter.ViewHolder holder, int position) {
+            Report data = listArray.get(position);
+            holder.created.setText(data.getCreatedDate());
+            holder.city.setText(String.valueOf(data.getUniqueKey()));
+            holder.burough.setText(data.getBorough());
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            TextView created;
+            TextView city;
+            TextView burough;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                System.out.println("RUNNING");
+                created = (TextView) itemView.findViewById(R.id.created_date);
+                city = (TextView) itemView.findViewById(R.id.city);
+                burough = (TextView) itemView.findViewById(R.id.burough);
+            }
+        }
+
+        @Override public int getItemCount() {
+            return listArray.size();
+        }
     }
 }

@@ -37,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
@@ -49,6 +50,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private final AppCompatActivity activity = LoginActivity.this;
@@ -77,6 +80,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private InputValidation inputValidation;
     private DatabaseHelper databaseHelper;
+
+    private int lockoutCounter;
+    private long lockoutTime;
+    private boolean lockedOut;
+
+    private String lockoutMessage =
+            String.format("Too many login attempts. Please try again later.");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,7 +258,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.appCompatButtonLogin:
-                verifyFromSQLite();
+                if (!lockedOut) {
+                    verifyFromSQLite();
+                } else {
+                    Snackbar.make(nestedScrollView, lockoutMessage, Snackbar.LENGTH_LONG).show();;
+                }
                 break;
             case R.id.textViewLinkRegister:
                 // Navigate to RegisterActivity
@@ -283,6 +297,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else {
             // Snack Bar to show success message that record is wrong
             Snackbar.make(nestedScrollView, getString(R.string.error_valid_email_password), Snackbar.LENGTH_LONG).show();
+            lockoutCounter++;
+            if (lockoutCounter > 3) {
+                lockedOut = true;
+                new CountDownTimer(30000, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        lockoutTime = millisUntilFinished / 1000;
+                    }
+
+                    public void onFinish() {
+                        lockedOut = false;
+                        lockoutCounter = 0;
+                    }
+
+                }.start();
+            }
         }
     }
 

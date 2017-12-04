@@ -29,7 +29,7 @@ public class LoadingGraphActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading_graph);
         System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference();
+        DatabaseReference reference = database.getReference().child("data");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -86,7 +86,7 @@ public class LoadingGraphActivity extends AppCompatActivity {
         for (int i = 0; i < validDateArray.size(); i++) {
             System.out.println("Building dp array");
             double numDate = (double) validDateArray.get(i).getDate()[1]
-                    + ((double)validDateArray.get(i).getDate()[0]/12);
+                    + ((double) validDateArray.get(i).getDate()[0]/12);
             dpArray[i] = new DataPoint(numDate, validDateArray.get(i).getCount());
         }
     }
