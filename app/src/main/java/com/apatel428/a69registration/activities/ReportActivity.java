@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.apatel428.a69registration.R;
+import com.apatel428.a69registration.helpers.ActiveUserHolder;
 import com.apatel428.a69registration.helpers.InputValidation;
 import com.apatel428.a69registration.model.Report;
 
@@ -19,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -32,9 +34,7 @@ public class ReportActivity extends AppCompatActivity {
     private Button confirm;
     private Button cancel;
     private DatabaseReference data;
-    private Calendar now;
 
-    private InputValidation inputValidation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +50,8 @@ public class ReportActivity extends AppCompatActivity {
         confirm = (Button) findViewById(R.id.confirmButton);
         cancel = (Button) findViewById(R.id.cancelButton);
 
-        data = FirebaseDatabase.getInstance().getReference().child("data");
-        now = Calendar.getInstance();
-
-        inputValidation = new InputValidation(this);
+        data = FirebaseDatabase.getInstance().getReference().child("reports");
+        System.out.println(data);
 
         initListeners();
     }
@@ -73,10 +71,12 @@ public class ReportActivity extends AppCompatActivity {
                     report.setCity(city.getText().toString());
                     report.setBorough(burough.getText().toString());
                     report.setIncidentZip(zip.getText().toString());
-                    report.setUniqueKey(generateKey(report));
                     report.setLatitude(Long.valueOf(latitude.getText().toString()));
-                    report.setLongitude(Long.valueOf(latitude.getText().toString()));
-                    data.child("UserReport").setValue(report);
+                    report.setLongitude(Long.valueOf(longitude.getText().toString()));
+                    report.setUniqueKey(generateKey(report));
+                    report.setCreatedDate(generateDate());
+                    data.child(String.valueOf(generateDataKey())).setValue(report);
+                    System.out.println(generateDataKey());
                     Intent intentConfirm = new Intent(getApplicationContext(), RatData.class); //Goes to blank page
                     startActivity(intentConfirm);
                     break;
@@ -89,13 +89,26 @@ public class ReportActivity extends AppCompatActivity {
     };
 
     private long generateKey(Report report) {
-        long key = report.getLatitude() * 3259 + report.getLongitude() * 1229; //Add lattitude/longitude fields
+        long key = report.getLatitude() * 23 + report.getLongitude() * 11; //Add lattitude/longitude fields
         return key;
     }
 
-    private long generateIndex() {
-        long index = now.getTimeInMillis();
-        System.out.println(index);
-        return index;
+    private String generateDate() {
+        String day = String.valueOf(Calendar.getInstance().getTime().getDate());
+        String month = String.valueOf(Calendar.getInstance().getTime().getMonth());
+        String year = String.valueOf(Calendar.getInstance().getTime().getYear() - 100);
+
+        return month + "-" + day + "-" + year;
+    }
+
+    private long generateDataKey() {
+        long day = Calendar.getInstance().getTime().getDate();
+        long month = Calendar.getInstance().getTime().getMonth();
+        long year = Calendar.getInstance().getTime().getYear() - 100;
+        long hour = Calendar.getInstance().getTime().getHours();
+        long minutes = Calendar.getInstance().getTime().getMinutes();
+        long seconds = Calendar.getInstance().getTime().getSeconds();
+
+        return 200000 + year * 13 + month * 11 + day * 7 + hour * 5 + minutes * 3 + seconds * 2;
     }
 }

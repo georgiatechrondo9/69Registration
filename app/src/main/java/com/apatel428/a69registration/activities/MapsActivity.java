@@ -56,7 +56,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         final int[] startArray = FilterActivity.startDateArray;
         final int[] endArray = FilterActivity.endDateArray;
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("data");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("reports");
         if (reference != null) {
             Log.i("REFERENCE", "Not Null");
         } else {

@@ -29,7 +29,7 @@ public class LoadingGraphActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading_graph);
         System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference().child("data");
+        DatabaseReference reference = database.getReference().child("reports");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

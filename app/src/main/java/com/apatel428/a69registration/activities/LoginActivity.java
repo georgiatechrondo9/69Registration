@@ -38,7 +38,9 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private final AppCompatActivity activity = LoginActivity.this;
@@ -77,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
+
         initViews();
         initListeners();
         initObjects();
@@ -179,6 +182,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initObjects() {
         databaseHelper = new DatabaseHelper(activity);
         inputValidation = new InputValidation(activity);
+        System.out.println("Date :" + Calendar.getInstance().getTime().getYear());
     }
 
     /**
