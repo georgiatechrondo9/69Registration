@@ -8,6 +8,8 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
 
     <application
         android:allowBackup="true"
@@ -59,6 +61,12 @@
             android:label="GraphActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.LoadingGraphActivity"></activity>
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
     </application>
+
+
 
 </manifest>

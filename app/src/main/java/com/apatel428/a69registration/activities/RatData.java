@@ -6,23 +6,37 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Filter;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
+
 import com.apatel428.a69registration.R;
 import com.apatel428.a69registration.adapters.RatAdapter;
 import com.apatel428.a69registration.model.Report;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+
+import static com.apatel428.a69registration.activities.LoadingGraphActivity.dateToInt;
 
 public class RatData extends AppCompatActivity implements View.OnClickListener {
     private DatabaseReference data;
@@ -33,6 +47,8 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
     private Button signOutButton;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
+
+    static final ArrayList<Report> reportList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +95,8 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
         // Google revoke access
         mGoogleSignInClient.revokeAccess();
+
+        LoginManager.getInstance().logOut();
     }
     @Override
     public void onClick(View v) {
@@ -96,5 +114,20 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
                 revokeAccess();
                 startActivity(new Intent(RatData.this, LoginActivity.class));
         }
+    }
+    /**
+     *
+     * @param o object with date
+     * @return int array [m,d,y]
+     */
+    public static int[] stringToIntArray(Object o) {
+        String string = o.toString();
+        String[] stringArray = string.split("-");
+        int[] intArray = new int[stringArray.length];
+        for(int i = 0;i < stringArray.length; i++) {
+            Integer integer = Integer.parseInt(stringArray[i]);
+            intArray[i] = integer.intValue();
+        }
+        return intArray;
     }
 }

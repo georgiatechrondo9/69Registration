@@ -12,12 +12,12 @@ public class Report extends AbstractReport{
     private String incidentaddress;
     private String city;
     private String borough;
-    private String latitude;
-    private String longitude;
+    private Double latitude;
+    private Double longitude;
 
     public Report() {
     }
-    public Report( String muniquekey, String mcreateddate, String mlocationtype, String mincidentzip, String mincidentaddress, String mcity, String mborough, String mlatitude, String mlongitude) {
+    public Report( String muniquekey, String mcreateddate, String mlocationtype, String mincidentzip, String mincidentaddress, String mcity, String mborough, Double mlatitude, Double mlongitude) {
         String uniquekey = muniquekey;
         String createddate = mcreateddate;
         String locationtype = mlocationtype;
@@ -25,8 +25,8 @@ public class Report extends AbstractReport{
         String incidentaddress = mincidentaddress;
         String city = mcity;
         String borough = mborough;
-        String latitude = mlatitude;
-        String longitude = mlongitude;
+        Double latitude = mlatitude;
+        Double longitude = mlongitude;
     }
 
 
@@ -74,11 +74,11 @@ public class Report extends AbstractReport{
         return borough;
     }
     @Override
-    public String getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
     @Override
-    public String getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
@@ -103,10 +103,10 @@ public class Report extends AbstractReport{
     public void setBorough(String Borough) {
         borough = Borough;
     }
-    public void setLatitude(String Latitude) {
+    public void setLatitude(Double Latitude) {
         latitude = Latitude;
     }
-    public void setLongitude(String Longitude) {
+    public void setLongitude(Double Longitude) {
         longitude = Longitude;
     }
 }

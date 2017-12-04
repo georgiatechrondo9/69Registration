@@ -32,10 +32,13 @@ import static com.apatel428.a69registration.activities.LoadingGraphActivity.date
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private DatabaseReference reference;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        reference = FirebaseDatabase.getInstance().getReference();
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -54,19 +57,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        final int[] startArray = FilterActivity.startDateArray;
-        final int[] endArray = FilterActivity.endDateArray;
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        if (reference != null) {
-            Log.i("REFERENCE", "Not Null");
-        } else {
-            Log.i("REFERENCE", "Null reference");
-        }
-        reference.addValueEventListener(new ValueEventListener() {
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        getPins(reference);
+    }
+
+    public void readData(DatabaseReference ref, final OnGetDataListener listener) {
+        listener.onStart();
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i("DATA","Data being read.");
+                listener.onSuccess(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.onFailure();
+            }
+        });
+    }
+
+    public void getPins(DatabaseReference ref) {
+        readData(ref, new OnGetDataListener() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                Log.i("LOCATION", "In snapshot");
                 for(DataSnapshot ds: dataSnapshot.getChildren()) {
+                    final int[] startArray = FilterActivity.startDateArray;
+                    final int[] endArray = FilterActivity.endDateArray;
                     Object longitude = ds.child("longitude").getValue();
                     Object latitude = ds.child("latitude").getValue();
                     Object uniqueKey = ds.child("uniquekey").getValue();
@@ -76,8 +96,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if (startArray != null && endArray != null) {
                             if (dateToInt(startArray) <= dateToInt(dateArray)
                                     && dateToInt(endArray) >= dateToInt(dateArray)) {
-                                        LatLng marker = new LatLng((Double) latitude, (Double) longitude);
-                                        mMap.addMarker(new MarkerOptions().position(marker).title(uniqueKey.toString()));
+                                LatLng marker = new LatLng((Double) latitude, (Double) longitude);
+                                mMap.addMarker(new MarkerOptions().position(marker).title(uniqueKey.toString()));
+                                Log.i("ADD","key: " + uniqueKey.toString());
                             }
                         }
                     }
@@ -85,14 +106,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onStart() {
+                Log.d("ONSTART", "Started");
+            }
 
+            @Override
+            public void onFailure() {
+                System.out.println("Failure");
             }
         });
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     /**
@@ -109,5 +131,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             intArray[i] = integer.intValue();
         }
         return intArray;
+    }
+
+    @Override
+    public void onStart() {
+        MapsActivity.super.onStart();
+        Log.d("ONSTART", "Started");
     }
 }
