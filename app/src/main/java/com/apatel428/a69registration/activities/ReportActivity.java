@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.apatel428.a69registration.R;
+import com.apatel428.a69registration.helpers.InputValidation;
 import com.apatel428.a69registration.model.Report;
 
 import com.google.firebase.database.DataSnapshot;
@@ -26,10 +27,14 @@ public class ReportActivity extends AppCompatActivity {
     private EditText city;
     private EditText zip;
     private EditText burough;
+    private EditText latitude;
+    private EditText longitude;
     private Button confirm;
     private Button cancel;
     private DatabaseReference data;
     private Calendar now;
+
+    private InputValidation inputValidation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +45,15 @@ public class ReportActivity extends AppCompatActivity {
         city = (EditText) findViewById(R.id.cityIn);
         zip = (EditText) findViewById(R.id.zipIn);
         burough = (EditText) findViewById(R.id.buroughIn);
+        latitude = (EditText) findViewById(R.id.latitude);
+        longitude = (EditText) findViewById(R.id.longitude);
         confirm = (Button) findViewById(R.id.confirmButton);
         cancel = (Button) findViewById(R.id.cancelButton);
 
         data = FirebaseDatabase.getInstance().getReference().child("data");
         now = Calendar.getInstance();
+
+        inputValidation = new InputValidation(this);
 
         initListeners();
     }
@@ -65,6 +74,8 @@ public class ReportActivity extends AppCompatActivity {
                     report.setBorough(burough.getText().toString());
                     report.setIncidentZip(zip.getText().toString());
                     report.setUniqueKey(generateKey(report));
+                    report.setLatitude(Long.valueOf(latitude.getText().toString()));
+                    report.setLongitude(Long.valueOf(latitude.getText().toString()));
                     data.child("UserReport").setValue(report);
                     Intent intentConfirm = new Intent(getApplicationContext(), RatData.class); //Goes to blank page
                     startActivity(intentConfirm);
