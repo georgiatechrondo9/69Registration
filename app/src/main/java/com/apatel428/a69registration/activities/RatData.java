@@ -92,13 +92,8 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
         adapter = new RatAdapter(listData);
 
         FDB = FirebaseDatabase.getInstance();
-        FDB.getReference().child("reports").child("**999999669").setValue(null);
-        FDB.getReference().child("reports").child("**999999637").setValue(null);
-        FDB.getReference().child("reports").child("**999999605").setValue(null);
-        FDB.getReference().child("reports").child("**999999595").setValue(null);
-        FDB.getReference().child("reports").child("**999999541").setValue(null);
-        FDB.getReference().child("reports").child("**999999171104193011").setValue(null);
-        FDB.getReference().child("reports").child("**9171104192750").setValue(null);
+
+        FDB.getReference().child("users").child("Test").setValue(new User());
         getDataFirebase();
     }
 
