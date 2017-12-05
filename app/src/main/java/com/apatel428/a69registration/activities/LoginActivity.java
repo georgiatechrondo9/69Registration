@@ -35,6 +35,8 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -51,6 +53,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -86,14 +89,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private long lockoutTime;
     private boolean lockedOut;
 
+    private DatabaseReference ref;
+
     private String lockoutMessage =
             String.format("Too many login attempts. Please try again later.");
+
+    private ArrayList<String> susLoginList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
+
+        ref = FirebaseDatabase.getInstance().getReference().child("loginAttempts");
 
         initViews();
         initListeners();
@@ -110,6 +119,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
         mAuth = FirebaseAuth.getInstance();
+
+        susLoginList = new ArrayList<>();
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
@@ -303,8 +314,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // Snack Bar to show success message that record is wrong
             Snackbar.make(nestedScrollView, getString(R.string.error_valid_email_password), Snackbar.LENGTH_LONG).show();
             lockoutCounter++;
+            String loginAttempt = "email: " + textInputEditTextEmail.getText().toString().trim()
+                    + ", pass: " + textInputEditTextPassword.getText().toString().trim();
+            susLoginList.add(loginAttempt);
             if (lockoutCounter > 3) {
                 lockedOut = true;
+                ref.child(dateFormat()).setValue(susLoginList);
                 new CountDownTimer(30000, 1000) {
                     public void onTick(long millisUntilFinished) {
                         lockoutTime = millisUntilFinished / 1000;
@@ -316,6 +331,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
 
                 }.start();
+                susLoginList.clear();
             }
         }
     }
@@ -326,5 +342,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void emptyInputEditText() {
         textInputEditTextEmail.setText(null);
         textInputEditTextPassword.setText(null);
+    }
+
+    private String dateFormat() {
+        Date d = Calendar.getInstance().getTime();
+        int year = d.getYear() - 100;
+        int month = d.getMonth();
+        int day = d.getDate();
+
+        return String.format("%d-%d-%d", month, day, year);
     }
 }
