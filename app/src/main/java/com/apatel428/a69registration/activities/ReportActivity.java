@@ -75,7 +75,7 @@ public class ReportActivity extends AppCompatActivity {
                     report.setLongitude(Long.valueOf(longitude.getText().toString()));
                     report.setUniqueKey(generateKey(report));
                     report.setCreatedDate(generateDate());
-                    data.child(String.valueOf(generateDataKey())).setValue(report);
+                    data.child(generateDataKey()).setValue(report);
                     System.out.println(generateDataKey());
                     Intent intentConfirm = new Intent(getApplicationContext(), RatData.class); //Goes to blank page
                     startActivity(intentConfirm);
@@ -101,7 +101,7 @@ public class ReportActivity extends AppCompatActivity {
         return month + "-" + day + "-" + year;
     }
 
-    private long generateDataKey() {
+    private String generateDataKey() {
         long day = Calendar.getInstance().getTime().getDate();
         long month = Calendar.getInstance().getTime().getMonth();
         long year = Calendar.getInstance().getTime().getYear() - 100;
@@ -109,6 +109,7 @@ public class ReportActivity extends AppCompatActivity {
         long minutes = Calendar.getInstance().getTime().getMinutes();
         long seconds = Calendar.getInstance().getTime().getSeconds();
 
-        return 200000 + year * 13 + month * 11 + day * 7 + hour * 5 + minutes * 3 + seconds * 2;
+        return "**999" + String.valueOf(year * 10000000000l +
+                month * 100000000l + day * 1000000l + hour * 10000l + minutes * 100 + seconds);
     }
 }

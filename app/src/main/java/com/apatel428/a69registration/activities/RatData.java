@@ -92,6 +92,13 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
         adapter = new RatAdapter(listData);
 
         FDB = FirebaseDatabase.getInstance();
+        FDB.getReference().child("reports").child("**999999669").setValue(null);
+        FDB.getReference().child("reports").child("**999999637").setValue(null);
+        FDB.getReference().child("reports").child("**999999605").setValue(null);
+        FDB.getReference().child("reports").child("**999999595").setValue(null);
+        FDB.getReference().child("reports").child("**999999541").setValue(null);
+        FDB.getReference().child("reports").child("**999999171104193011").setValue(null);
+        FDB.getReference().child("reports").child("**9171104192750").setValue(null);
         getDataFirebase();
     }
 
@@ -103,7 +110,7 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Report data;
                 data = dataSnapshot.getValue(Report.class);
-                System.out.print("Key" + dataSnapshot.getKey());
+                System.out.println("Key" + dataSnapshot.getKey());
                 listData.add(data);
                 ratView.setAdapter(adapter);
             }
@@ -180,7 +187,7 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
         @Override
         public void onBindViewHolder(RatAdapter.ViewHolder holder, int position) {
-            Report data = listArray.get(position);
+            Report data = listArray.get(listArray.size() - position - 1);
             holder.created.setText(data.getCreatedDate());
             holder.city.setText(String.valueOf(data.getCity()));
             holder.burough.setText(data.getBorough());
