@@ -20,6 +20,7 @@ import com.apatel428.a69registration.helpers.InputValidation;
 import com.apatel428.a69registration.model.Report;
 import com.apatel428.a69registration.model.Report;
 import com.apatel428.a69registration.model.User;
+import com.apatel428.a69registration.sql.FirebaseHelper;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -56,6 +57,7 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rat_data);
         count = 0;
+        ActiveUserHolder.setUser(new User()); //DELETE LATER
         initViews();
         initListeners();
 
@@ -72,8 +74,6 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this,gso);
         mAuth = FirebaseAuth.getInstance();
-
-        ActiveUserHolder.setUser(new User());
 
     }
 
@@ -93,7 +93,10 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
 
         FDB = FirebaseDatabase.getInstance();
 
-        FDB.getReference().child("users").child("Test").setValue(new User());
+        FDB.getReference().child("users").child("Test").setValue(new User()); //DELETE LATER
+        FirebaseHelper fbh = new FirebaseHelper(); //DELETE LATER
+        fbh.checkUser(ActiveUserHolder.getUser().getEmail(), ActiveUserHolder.getUser().getPassword());
+        System.out.println(fbh.getCheck());
         getDataFirebase();
     }
 
@@ -105,7 +108,6 @@ public class RatData extends AppCompatActivity implements View.OnClickListener {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Report data;
                 data = dataSnapshot.getValue(Report.class);
-                System.out.println("Key" + dataSnapshot.getKey());
                 listData.add(data);
                 ratView.setAdapter(adapter);
             }

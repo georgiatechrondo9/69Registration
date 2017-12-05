@@ -29,9 +29,6 @@
         <activity
             android:name=".activities.RegisterActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.UsersListActivity"
-            android:screenOrientation="portrait" />
         <activity android:name=".activities.RatData" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
