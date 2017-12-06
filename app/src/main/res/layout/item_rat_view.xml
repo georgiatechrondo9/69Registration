@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="Name"></android.support.v7.widget.AppCompatTextView>
+                android:text="City"></android.support.v7.widget.AppCompatTextView>
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/city"
@@ -42,8 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="Email"
-                />
+                android:text="Borough" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/burough"
@@ -64,8 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="Password"
-                />
+                android:text="Date" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/created_date"
